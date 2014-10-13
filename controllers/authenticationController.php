@@ -5,7 +5,7 @@
  * - Displays the form for authentication
  */
 $app->get('/', function () {
-    echo '<form method="post" action="authentication">';
+    echo '<form method="post" action="index.php/authentication">';
     echo '<input type="text" name="username">';
     echo '<input type="password" name="password">';
     echo '<input type="submit" value="Logg inn!!">';
