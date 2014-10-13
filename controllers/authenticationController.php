@@ -69,8 +69,9 @@ $app->post('/authenticate', function () use ($app) {
 
 /**
  * Logout
- * - Clears session
+ * - Clears session and redirects to funnel
  */
 $app->get('/logout', function () use ($app) {
-    // Insert logout logic here.
+    session_destroy();
+    $app->redirect($app->config('url').'/index.php');
 });
