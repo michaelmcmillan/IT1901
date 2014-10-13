@@ -1,9 +1,16 @@
 <?php
+/**
+ * Bootstrap
+ */
 require 'vendor/autoload.php';
 $app = new \Slim\Slim();
 
-$app->get('/', function () {
-    echo 'Hei verden!';
+
+require 'controllers/authenticationController.php';
+
+$app->error(function (\Exception $e) use ($app) {
+    echo $e->getMessage();
 });
+
 
 $app->run();
