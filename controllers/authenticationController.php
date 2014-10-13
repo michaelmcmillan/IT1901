@@ -14,7 +14,7 @@ $app->get('/', function () use ($app) {
  * Authentication
  * - Handles authentication logic
  */
-$app->post('/authentication', function () use ($app) {
+$app->post('/authenticate', function () use ($app) {
     $username = $app->request->post('username');
     $password = $app->request->post('password');
 
