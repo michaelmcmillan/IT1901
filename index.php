@@ -12,5 +12,9 @@ $app->error(function (\Exception $e) use ($app) {
     echo $e->getMessage();
 });
 
+$app->get('/test', function () {
+    echo 'hello';
+});
+
 
 $app->run();
