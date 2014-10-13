@@ -1,16 +1,11 @@
 
 $(document).ready(function () {
 
-    var map = new GMaps({
-      div: '#map-canvas',
-      lat: 63.13,
-      lng: 10.43,
-      zoom: 7,
-      streetViewControl: false
-    });
-
+    /**
+     * Generate reservation form
+     */
     function reserveForm (cabin) {
-        $('.reservation-form').slideDown ("fast", function () {
+        $('.reservation-form').slideDown ("slow", function () {
 
             // Initiate daterange
             $('.input-daterange').datepicker({
@@ -25,9 +20,14 @@ $(document).ready(function () {
         });
     }
 
+    /**
+     * Post reservation form
+     */
     $('input[name="reserve"]').click(reserveCabin);
+
     function reserveCabin (id) {
 
+        // Build parameters
         var params = {
             cabinId : $('input[name="cabin"]').val(),
             beds    : $('input[name="beds"]').val(),
@@ -35,15 +35,35 @@ $(document).ready(function () {
             to      : $('input[name="to"]').val()
         }
 
+        // Post to server
         $.ajax ({
             type: 'post',
             url : 'reserve/' + params.cabinId,
-            data: params,
-            success: function (data) {
-                console.log(data);
-            }
+            data: params
+        })
+        .fail(function(xhr) {
+
+            console.log();
+
+            swal("Feil!", xhr.responseJSON.message, "error")
+        })
+        .success(function (data) {
+            swal("Reservert!", "Koien er herved reservert", "success")
         });
+
     }
+
+
+    /**
+     * Display map with markers
+     */
+    var map = new GMaps({
+      div: '#map-canvas',
+      lat: 63.13,
+      lng: 10.43,
+      zoom: 7,
+      streetViewControl: false
+    });
 
     $.getJSON('cabins', function (cabins) {
         $(cabins).each(function (index, cabin) {
@@ -54,6 +74,9 @@ $(document).ready(function () {
                 title: cabin.name,
                 animation: google.maps.Animation.DROP,
                 click: function (e) {
+
+
+
                     swal({
                         title: 'Reserver ' + cabin.name,
                         text: 'Ønsker du å lage en reservasjon?',
@@ -64,7 +87,14 @@ $(document).ready(function () {
                         confirmButtonText: "Ja, takk!",
                         closeOnConfirm: true
                     }, function () {
-                        reserveForm(cabin);
+
+                        /* Hide reservation form if open */
+                        $('.reservation-form').slideUp("slow", function () {
+
+                            /* Open the new reservation form */
+                            reserveForm(cabin);
+                        });
+
                     });
                 }
             });

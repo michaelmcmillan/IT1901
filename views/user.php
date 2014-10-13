@@ -31,11 +31,11 @@
             <fieldset>
                 <div class="input-daterange">
                     <div class="form-group">
-                        <input class="form-control date" name="from" placeholder="Fra dato" />
+                        <input class="form-control date" name="from" placeholder="Fra dato" required />
                     </div>
 
                     <div class="form-group">
-                        <input class="form-control date" name="to" placeholder="Til dato" />
+                        <input class="form-control date" name="to" placeholder="Til dato" required />
                     </div>
                 </div>
             </fieldset>
@@ -44,7 +44,7 @@
         <div class="col-md-4">
             <fieldset>
                 <div class="form-group">
-                    <input class="form-control" placeholder="Antall senger" min="1" name="beds" type="number">
+                    <input class="form-control" placeholder="Antall senger" min="1" name="beds" type="number" required>
                 </div>
 
                 <div class="form-group">

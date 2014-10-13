@@ -25,7 +25,17 @@ require 'controllers/userController.php';
 require 'controllers/apiController.php';
 
 $app->error(function (\Exception $e) use ($app) {
-    echo $e->getMessage();
+
+    if ($e instanceof apiException) {
+
+        $app->response->headers->set('Content-Type', 'application/json');
+        echo json_encode (array ('message' => $e->getMessage()));
+
+    } else {
+
+        echo $e->getMessage();
+
+    }
 });
 
 $app->run();
