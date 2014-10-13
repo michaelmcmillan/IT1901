@@ -15,6 +15,12 @@ instruksjoner etterhvert.
 git clone https://github.com
 ````
 
+### Database
+- Host: <code>mysql.stud.ntnu.no</code>
+- Bruker: <code>it1901gr16_bruke</code>
+- Database: <code>it1901gr16_koier</code>
+
+
 ### Deployment
 For at endringene du har gjort skal bli reflektert på
 serveren som faktisk kjører programvaren må du <code>git merge</code>
@@ -25,4 +31,3 @@ koden din inn i <code>production</code> branchen i dette repo-et.
 - Masoom Maham
 - Mathias Bratvold Nervik
 - Michael McMillan
- 
