@@ -4,3 +4,4 @@ vendor/
 composer.phar
 .htaccess
 deploy.sh
+configuration.php
