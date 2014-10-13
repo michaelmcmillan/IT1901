@@ -1,14 +1,21 @@
-var map;
 
-function initialize() {
+$(document).ready(function () {
+    var map = new GMaps({
+      div: '#map-canvas',
+      lat: 63.13,
+      lng: 10.43,
+      zoom: 8,
+      streetViewControl: false
+    });
 
-  var mapOptions = {
-    center: { lat: 63.13, lng: 10.43},
-    zoom: 8
-  };
+    map.addMarker({
+      lat: 63.13,
+      lng: 10.43,
+      title: 'Lima',
+      animation: google.maps.Animation.DROP,
 
-  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
+      click: function(e) {
+        alert('You clicked in this marker');
+      }
+    });
+})
