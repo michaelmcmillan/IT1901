@@ -13,10 +13,10 @@
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
               <li><a href="#">Tidligere reservasjoner</a></li>
-              <li><a href="#">Logg ut</a></li>
+              <li><a href="<?php echo $url?>/logout">Logg ut</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
-        </div><!--/.container-fluid -->
+          </div>
+        </div>
       </div>
 
     <div class="row map">
