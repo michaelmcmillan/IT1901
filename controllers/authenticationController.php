@@ -4,12 +4,10 @@
  * View: Form
  * - Displays the form for authentication
  */
-$app->get('/', function () {
-    echo '<form method="post" action="index.php/authentication">';
-    echo '<input type="text" name="username">';
-    echo '<input type="password" name="password">';
-    echo '<input type="submit" value="Logg inn!!">';
-    echo '</form>';
+$app->get('/', function () use ($app) {
+    $app->render('header.php');
+    $app->render('login.php');
+    $app->render('footer.php');
 });
 
 /**
