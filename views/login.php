@@ -16,7 +16,7 @@
 			 	</div>
 
                   <div class="panel-body">
-			    	<form method="post" action="index.php/authenticate" role="form">
+			    	<form method="post" action="authenticate" role="form">
                         <fieldset>
                             <div class="form-group">
     			    		    <input class="form-control" placeholder="E-post" name="username" type="email">
