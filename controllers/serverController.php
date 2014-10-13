@@ -6,6 +6,6 @@
  */
 $app->post('/deploy', function () {
     $script = '/home/groupswww/it1901gr16/deploy.sh';
-    exec ($script, $output);
+    $output = shell_exec ($script);
     print_r($output);
 });
