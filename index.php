@@ -22,6 +22,7 @@ session_start ();
 require 'controllers/serverController.php';
 require 'controllers/authenticationController.php';
 require 'controllers/userController.php';
+require 'controllers/apiController.php';
 
 $app->error(function (\Exception $e) use ($app) {
     echo $e->getMessage();

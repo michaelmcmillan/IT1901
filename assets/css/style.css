@@ -14,3 +14,16 @@ body {
     margin: 0px;
     padding: 0px
 }
+
+.reservation-form {
+    margin-top:20px;
+}
+
+.input-daterange input {
+    text-align: left;
+}
+
+.datepicker table tr td.active.active, .datepicker table tr td.active:hover.active {
+    background-color: #18BC9C;
+    border-color: #18BC9C;
+}
