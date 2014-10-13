@@ -21,6 +21,14 @@ $app->post('/authenticate', function () use ($app) {
     if (!$username || !$password)
         $app->error(new Exception('Vennligst oppgi brukernavn & passord.'));
 
+    $user = R::findOne('users', ' email = ? ', array ($username));
+
+    if (empty($user))
+        $app->error(new Exception('Fant ingen brukere med det brukernavnet.'));
+
+    if ($user->password !== $password)
+        $app->error(new Exception('Feil passord.'));
+
 
 });
 
