@@ -9,13 +9,12 @@ $(document).ready(function () {
     });
 
     map.addMarker({
-      lat: 63.13,
-      lng: 10.43,
-      title: 'Lima',
-      animation: google.maps.Animation.DROP,
-
-      click: function(e) {
-        alert('You clicked in this marker');
-      }
+        lat: 63.13,
+        lng: 10.43,
+        title: 'Lima',
+        animation: google.maps.Animation.DROP,
+        click: function (e) {
+            alert('You clicked in this marker');
+        }
     });
 })
