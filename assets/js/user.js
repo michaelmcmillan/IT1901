@@ -14,7 +14,7 @@ $(document).ready(function () {
 
             // Initiate daterange
             $('.input-daterange').datepicker({
-                format: 'dd/mm/yyyy',
+                format: 'dd-mm-yyyy',
                 startDate: '+1d',
                 language: 'nb'
             });
@@ -28,8 +28,21 @@ $(document).ready(function () {
     $('input[name="reserve"]').click(reserveCabin);
     function reserveCabin (id) {
 
-        var ok = $('input[name="cabin"]').attr('value');
-        alert(ok);
+        var params = {
+            cabinId : $('input[name="cabin"]').val(),
+            beds    : $('input[name="beds"]').val(),
+            from    : $('input[name="from"]').val(),
+            to      : $('input[name="to"]').val()
+        }
+
+        $.ajax ({
+            type: 'post',
+            url : 'reserve/' + params.cabinId,
+            data: params,
+            success: function (data) {
+                console.log(data);
+            }
+        });
     }
 
     $.getJSON('cabins', function (cabins) {
