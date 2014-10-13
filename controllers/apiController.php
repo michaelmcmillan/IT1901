@@ -18,8 +18,31 @@ class apiException extends Exception {
  */
 $isAvailable = function ($cabinId, $from, $to) {
 
-    
+    $reservations = R::exportAll(R::find('reservations',
+        ' cabin_id = :cabinId', array (
+            ':cabinId' => $cabinId,
+        )
+    ));
 
+    /* Must be available if no reservations were found */
+    if (!$reservations)
+        return true;
+
+    /* Find if collision between reservations */
+    foreach ($reservations as $key => $reservation) {
+
+        if (strtotime($from) >= strtotime($reservation['from'])
+        &&  strtotime($from) <= strtotime($reservation['to'])) {
+            return false;
+        }
+
+        if (strtotime($to) <= strtotime($reservation['to'])
+        &&  strtotime($to) >= strtotime($reservation['from'])) {
+            return false;
+        }
+    }
+
+    return true;
 };
 
 /**
@@ -38,13 +61,13 @@ $app->get('/cabins', function () use ($app) {
  * - @param from (date) (string)
  * - @param to   (date) (string)
  */
-$app->post('/reserve/:cabinId', function ($cabinId) use ($app) {
+$app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
     $app->response->headers->set('Content-Type', 'application/json');
 
     $cabinId = (int)     $cabinId;
     $beds    = (int)     $app->request->post('beds');
-    $from    = strtotime($app->request->post('from'));
-    $to      = strtotime($app->request->post('to'));
+    $from    =           $app->request->post('from');
+    $to      =           $app->request->post('to');
 
     if (!$from || !$to || !$beds)
         $app->error(new apiException('Du må velge noe på alle feltene.'));
@@ -52,16 +75,26 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app) {
     if ($beds < 1 || $beds > 5)
         $app->error(new apiException('Du kan makismalt reservere 5 senger.'));
 
-    $reservation = R::dispense('reservations');
-    $reservation->userId  = $_SESSION['user']['id'];
-    $reservation->cabinId = $cabinId;
-    $reservation->beds    = $beds;
-    $reservation->from    = date('Y-m-d H:i:s', $from);
-    $reservation->to      = date('Y-m-d H:i:s', $to);
-    $id = R::store($reservation);
+    /* Check if cabin is available */
+    if ($isAvailable($cabinId, $from, $to) == true) {
 
-    if (!$id)
-        $app->error(new apiException('Noe gikk galt. Prøv igjen senere.'));
+        $reservation = R::dispense('reservations');
+        $reservation->userId  = $_SESSION['user']['id'];
+        $reservation->cabinId = $cabinId;
+        $reservation->beds    = $beds;
+        $reservation->from    = date('Y-m-d H:i:s', strtotime($from));
+        $reservation->to      = date('Y-m-d H:i:s', strtotime($to));
+        $id = R::store($reservation);
 
-    echo json_encode (array ('message' => 'success'), true);
+        if (!$id)
+            $app->error(new apiException('Noe gikk galt. Prøv igjen senere.'));
+
+        echo json_encode (array ('message' => 'success'), true);
+
+    /* Cabin is taken */
+    } else {
+
+        $app->error(new apiException('Koien er desverre opptatt på de datoene.'));
+
+    }
 });
