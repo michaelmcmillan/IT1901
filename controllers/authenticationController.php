@@ -8,7 +8,7 @@ $app->get('/', function () {
     echo '<form method="post" action="authentication">';
     echo '<input type="text" name="username">';
     echo '<input type="password" name="password">';
-    echo '<input type="submit" value="Logg inn">';
+    echo '<input type="submit" value="Logg inn!">';
     echo '</form>';
 });
 
