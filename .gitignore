@@ -4,4 +4,5 @@ vendor/
 composer.phar
 .htaccess
 deploy.sh
+tests/sqlite.db
 configuration.php
