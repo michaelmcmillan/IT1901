@@ -7,5 +7,5 @@ casper.test.begin('Login and logout of a user', 1, function suit (test) {
     }).run(function() {
         test.done();
     });
-    
+
 });

@@ -19,5 +19,5 @@ before_script:
 script:
   - whoami
   - cd tests
-  - casperjs test *.js --server=http://localhost:8080
+  - casperjs test *.js --server="http://localhost:8080" --log-level="debug" --verbose
   - ls -al
