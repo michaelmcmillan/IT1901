@@ -4,18 +4,36 @@
  */
 require 'vendor/autoload.php';
 require 'rb.php';
-require 'configuration.php';
 
-$url =
+/* MySQL when in production & staging*/
+if (getenv('travis')) {
+
+    require 'configuration.php';
+    R::setup('mysql:host='.$config['host'].';dbname='.$config['db'],
+        $config['user'], $config['pass']);
+
+/* Sqlite when testing */
+} else {
+
+    /* Setup sqlitedb */
+    R::setup('sqlite:/' . getcwd() . '/tests/sqlite.db');
+
+    /* Scaffold if empty */
+    $test = R::load('users', 0);
+    if (empty($test->email))
+        require 'tests/scaffold.php';
+
+    /* Set url for test */
+    $config['url'] = 'http://localhost:1337';
+}
+
+/* Bootstrap Slim */
 $app = new \Slim\Slim();
 $app->config(array(
     'debug' => true,
     'templates.path' => 'views/',
     'url' => $config['url']
 ));
-
-R::setup('mysql:host='.$config['host'].';dbname='.$config['db'],
-    $config['user'], $config['pass']);
 
 session_start ();
 
