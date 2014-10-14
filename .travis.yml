@@ -17,3 +17,5 @@ before_script:
 script:
   - cd tests
   - casperjs test *.js --server=http://localhost:8080
+  - ls -al
+  - cat sqlite.db
