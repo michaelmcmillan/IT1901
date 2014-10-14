@@ -5,15 +5,16 @@ php:
 
 before_script:
   - node -v
+  - curl --version
   - composer install
   - wget https://github.com/n1k0/casperjs/archive/1.1-beta3.tar.gz -O /tmp/casper.tar.gz
   - tar -xvf /tmp/casper.tar.gz
   - export PATH=$PATH:$PWD/casperjs-1.1-beta3/bin/
   - phantomjs --version
   - casperjs --version
-  - nohup php -S localhost:1337 > /dev/null 2>&1 &
+  - nohup php -S localhost:8080 > /dev/null 2>&1 &
   - sleep 5
-
+  - curl http://localhost:8080 -L
 script:
   - cd tests
-  - casperjs test *.js --server=http://localhost:1337
+  - casperjs test *.js --server=http://localhost:8080
