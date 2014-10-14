@@ -24,7 +24,7 @@ if (!getenv('travis')) {
         require 'tests/scaffold.php';
 
     /* Set url for test */
-    $config['url'] = 'http://localhost:1337';
+    $config['url'] = 'http://localhost:8080';
 }
 
 /* Bootstrap Slim */
