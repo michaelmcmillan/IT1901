@@ -12,7 +12,7 @@ before_script:
   - export PATH=$PATH:$PWD/casperjs-1.1-beta3/bin/
   - phantomjs --version
   - casperjs --version
-  - nohup php -S localhost:5000 > /dev/null 2>&1 &
+  - nohup php -S localhost:5000 > /dev/null 2>&1
   - sleep 5
 script:
   - cd tests
