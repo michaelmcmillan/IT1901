@@ -31,11 +31,19 @@ $isAvailable = function ($cabinId, $from, $to) {
     /* Find if collision between reservations */
     foreach ($reservations as $key => $reservation) {
 
+        /**
+         *    [----]
+         *  [----]
+         */
         if (strtotime($from) >= strtotime($reservation['from'])
         &&  strtotime($from) <= strtotime($reservation['to'])) {
             return false;
         }
-
+        
+        /**
+         *  [----]
+         *    [----]
+         */
         if (strtotime($to) <= strtotime($reservation['to'])
         &&  strtotime($to) >= strtotime($reservation['from'])) {
             return false;
