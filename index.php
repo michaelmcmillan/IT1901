@@ -6,7 +6,7 @@ require 'vendor/autoload.php';
 require 'rb.php';
 
 /* MySQL when in production & staging*/
-if (!getenv('travis')) {
+if (get_current_user() !== 'travis') {
 
     require 'configuration.php';
     R::setup('mysql:host='.$config['host'].';dbname='.$config['db'],
