@@ -19,5 +19,5 @@ before_script:
 script:
   - whoami
   - cd tests
-  - casperjs test *.js --server="http://localhost:8080" --log-level="debug" --verbose --ignore-ssl-errors=yes
+  - casperjs test *.js --ignore-ssl-errors=yes --ssl-protocol=any --server="http://localhost:8080" --log-level="debug" --verbose 
   - ls -al
