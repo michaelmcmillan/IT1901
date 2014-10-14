@@ -12,12 +12,12 @@ before_script:
   - export PATH=$PATH:$PWD/casperjs-1.1-beta3/bin/
   - phantomjs --version
   - casperjs --version
-  - echo whoami
+  - whoami
   - php -r "echo exec('whoami');"
   - nohup php -S localhost:8080 > out.log 2>&1 &
   - sleep 5
 script:
-  - echo whoami
+  - whoami
   - cd tests
   - casperjs test *.js --server=http://localhost:8080
   - ls -al
