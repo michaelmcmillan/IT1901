@@ -35,17 +35,15 @@ $isAvailable = function ($cabinId, $from, $to) {
          *    [----]
          *  [----]
          */
-        if (strtotime($from) >= strtotime($reservation['from'])
-        &&  strtotime($from) <= strtotime($reservation['to'])) {
-            return false;
-        }
-        
+        if ((strtotime($from) >= strtotime($reservation['from']))
+        &&  (strtotime($from) <= strtotime($reservation['to']))
+
         /**
          *  [----]
          *    [----]
          */
-        if (strtotime($to) <= strtotime($reservation['to'])
-        &&  strtotime($to) >= strtotime($reservation['from'])) {
+        || (strtotime($to) <= strtotime($reservation['to']))
+        && (strtotime($to) >= strtotime($reservation['from']))) {
             return false;
         }
     }
