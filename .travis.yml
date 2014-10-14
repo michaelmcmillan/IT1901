@@ -4,7 +4,7 @@ php:
   - 5.4
 
 before_script:
-  - sudo apt-get install nodejs
+  - node -v
   - composer install
   - wget https://github.com/n1k0/casperjs/archive/1.1-beta3.tar.gz -O /tmp/casper.tar.gz
   - tar -xvf /tmp/casper.tar.gz
