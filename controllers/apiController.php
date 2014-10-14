@@ -16,7 +16,7 @@ class apiException extends Exception {
  * - @param to      (string)
  * - @return boolean
  */
-$isAvailable = function ($cabinId, $from, $to) {
+$isAvailable = function ($cabinId, $from, $to, $beds) {
 
     $reservations = R::exportAll(R::find('reservations',
         ' cabin_id = :cabinId', array (
@@ -29,6 +29,7 @@ $isAvailable = function ($cabinId, $from, $to) {
         return true;
 
     /* Find if collision between reservations */
+    $reservationCollisions = array ();
     foreach ($reservations as $key => $reservation) {
 
         /**
@@ -44,10 +45,31 @@ $isAvailable = function ($cabinId, $from, $to) {
          */
         || (strtotime($to) <= strtotime($reservation['to']))
         && (strtotime($to) >= strtotime($reservation['from']))) {
-            return false;
+
+            /* Add as a collision */
+            $reservationCollisions[] = $reservation;
         }
     }
 
+    /* If any collisions were found, see if there's enough beds */
+    if (empty($reservationCollisions) == false) {
+
+        /* Find how many beds are already taken */
+        $bedsAlreadyTaken = 0;
+        foreach ($reservationCollisions as $reservation) {
+            $bedsAlreadyTaken += $reservation['beds'];
+        }
+
+        /* Find the total amount of beds on selected cabin */
+        $cabin = R::load('cabins', $cabinId);
+        $totalBedsAtCabin = $cabin->beds;
+
+        /* Are we going over the total available beds with new reservation */
+        if ($bedsAlreadyTaken + $beds > $totalBedsAtCabin)
+            return false;
+    }
+
+    /* It's safe to allow the reservation */
     return true;
 };
 
@@ -81,9 +103,10 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
     if ($beds < 1 || $beds > 5)
         $app->error(new apiException('Du kan makismalt reservere 5 senger.'));
 
-    /* Check if cabin is available */
-    if ($isAvailable($cabinId, $from, $to) == true) {
+    /* Check if cabin is available (will throw exception) */
+    if ($isAvailable($cabinId, $from, $to, $beds)) {
 
+        /* Safe to reserve */
         $reservation = R::dispense('reservations');
         $reservation->userId  = $_SESSION['user']['id'];
         $reservation->cabinId = $cabinId;
@@ -96,11 +119,8 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
             $app->error(new apiException('Noe gikk galt. Prøv igjen senere.'));
 
         echo json_encode (array ('message' => 'success'), true);
-
-    /* Cabin is taken */
     } else {
-
-        $app->error(new apiException('Koien er desverre opptatt på de datoene.'));
-
+        $app->error(new apiException('Koien er dessverre opptatt i det tidsrommet.'));
     }
+
 });
