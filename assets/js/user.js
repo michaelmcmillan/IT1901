@@ -26,6 +26,7 @@ $(document).ready(function () {
     $('a#reservation-previous').click(previousReservations);
 
     function previousReservations () {
+        $('.reservation-form').slideUp('slow');
         $('.reservation-previous').slideDown("slow", function () {
 
         });
