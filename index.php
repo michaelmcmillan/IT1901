@@ -6,7 +6,6 @@ require 'vendor/autoload.php';
 require 'rb.php';
 require 'configuration.php';
 
-$url =
 $app = new \Slim\Slim();
 $app->config(array(
     'debug' => true,
