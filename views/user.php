@@ -25,6 +25,44 @@
         </div>
     </div>
 
+    <!-- Previous reservations list -->
+    <div class="row reservation-previous">
+        <div class="col-md-12">
+            <table class="table table-hover reservation-table">
+              <thead>
+                <tr>
+                  <th>Koie</th>
+                  <th>Fra ...</th>
+                  <th>Til</th>
+                  <th>Rapporter</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Flåkoia</td>
+                  <td>23.03.2013</td>
+                  <td>22.03.2014</td>
+                  <td class="report"><button type="button" class="btn btn-xs btn-danger">Avlegg</button></td>
+                </tr>
+                <tr>
+                  <td>Flåkoia</td>
+                  <td>23.03.2013</td>
+                  <td>22.03.2014</td>
+                  <td><button type="button" class="btn btn-xs btn-success">Motatt</button></td>
+                </tr>
+                <tr>
+                  <td>Flåkoia</td>
+                  <td>23.03.2013</td>
+                  <td>22.03.2014</td>
+                  <td><button type="button" class="btn btn-xs btn-success">Motatt</button></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Reservation form -->
     <div class="row reservation-form" style="display:none;">
 
         <div class="col-md-4">
