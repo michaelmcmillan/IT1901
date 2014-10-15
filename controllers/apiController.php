@@ -100,8 +100,8 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
     if (!$from || !$to || !$beds)
         $app->error(new apiException('Du må velge noe på alle feltene.'));
 
-    if ($beds < 1 || $beds > 5)
-        $app->error(new apiException('Du kan makismalt reservere 5 senger.'));
+    if ($beds < 1)
+        $app->error(new apiException('Du må reservere minst èn seng.'));
 
     /* Check if cabin is available (will throw exception) */
     if ($isAvailable($cabinId, $from, $to, $beds)) {
