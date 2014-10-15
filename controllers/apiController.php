@@ -125,3 +125,11 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
 
 
 });
+
+/**
+ * GET /reservations
+ * - Returns an array of all previous reservation by the user
+ */
+$app->get('/reservations', function () use ($app) {
+    
+});
