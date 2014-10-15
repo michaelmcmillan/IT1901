@@ -16,7 +16,7 @@ class apiException extends Exception {
  * - @param to      (string)
  * - @return boolean
  */
-$isAvailable = function ($cabinId, $from, $to, $beds) {
+$isAvailable = function ($cabinId, $from, $to, $beds) use ($app) {
 
     $reservations = R::exportAll(R::find('reservations',
         ' cabin_id = :cabinId', array (
@@ -66,7 +66,10 @@ $isAvailable = function ($cabinId, $from, $to, $beds) {
 
         /* Are we going over the total available beds with new reservation */
         if ($bedsAlreadyTaken + $beds > $totalBedsAtCabin)
-            return false;
+            $app->error(new apiException(
+                'Det er '.($totalBedsAtCabin - $bedsAlreadyTaken).' ledige ' .
+                'seng(er) igjen.'
+            ));
     }
 
     /* It's safe to allow the reservation */
@@ -104,23 +107,21 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
         $app->error(new apiException('Du må reservere minst èn seng.'));
 
     /* Check if cabin is available (will throw exception) */
-    if ($isAvailable($cabinId, $from, $to, $beds)) {
+    $isAvailable($cabinId, $from, $to, $beds);
 
-        /* Safe to reserve */
-        $reservation = R::dispense('reservations');
-        $reservation->userId  = $_SESSION['user']['id'];
-        $reservation->cabinId = $cabinId;
-        $reservation->beds    = $beds;
-        $reservation->from    = date('Y-m-d H:i:s', strtotime($from));
-        $reservation->to      = date('Y-m-d H:i:s', strtotime($to));
-        $id = R::store($reservation);
+    /* Safe to reserve */
+    $reservation = R::dispense('reservations');
+    $reservation->userId  = $_SESSION['user']['id'];
+    $reservation->cabinId = $cabinId;
+    $reservation->beds    = $beds;
+    $reservation->from    = date('Y-m-d H:i:s', strtotime($from));
+    $reservation->to      = date('Y-m-d H:i:s', strtotime($to));
+    $id = R::store($reservation);
 
-        if (!$id)
-            $app->error(new apiException('Noe gikk galt. Prøv igjen senere.'));
+    if (!$id)
+        $app->error(new apiException('Noe gikk galt. Prøv igjen senere.'));
 
-        echo json_encode (array ('message' => 'success'), true);
-    } else {
-        $app->error(new apiException('Koien er dessverre opptatt i det tidsrommet.'));
-    }
+    echo json_encode (array ('message' => 'success'), true);
+
 
 });
