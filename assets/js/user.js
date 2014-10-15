@@ -21,6 +21,17 @@ $(document).ready(function () {
     }
 
     /**
+     * View previous reservations
+     */
+    $('a#reservation-previous').click(previousReservations);
+
+    function previousReservations () {
+        $('.reservation-previous').slideDown("slow", function () {
+
+        });
+    }
+
+    /**
      * Post reservation form
      */
     $('input[name="reserve"]').click(reserveCabin);
@@ -42,9 +53,6 @@ $(document).ready(function () {
             data: params
         })
         .fail(function(xhr) {
-
-            console.log();
-
             swal("Feil!", xhr.responseJSON.message, "error")
         })
         .success(function (data) {
@@ -89,6 +97,7 @@ $(document).ready(function () {
                     }, function () {
 
                         /* Hide reservation form if open */
+                        $('.reservation-previous').slideUp('slow');
                         $('.reservation-form').slideUp("slow", function () {
 
                             /* Open the new reservation form */
