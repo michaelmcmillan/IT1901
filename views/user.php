@@ -38,24 +38,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="danger">
-                  <td>Flåkoia</td>
-                  <td>23.03.2013</td>
-                  <td>22.03.2014</td>
-                  <td class="report"><button type="button" class="btn btn-xs btn-danger">Avlegg</button></td>
-                </tr>
-                <tr class="success">
-                  <td>Flåkoia</td>
-                  <td>23.03.2013</td>
-                  <td>22.03.2014</td>
-                  <td><button type="button" class="btn btn-xs btn-success">Motatt</button></td>
-                </tr>
-                <tr class="success">
-                  <td>Flåkoia</td>
-                  <td>23.03.2013</td>
-                  <td>22.03.2014</td>
-                  <td><button type="button" class="btn btn-xs btn-success">Motatt</button></td>
-                </tr>
+                  <!-- Reservations will be appended here -->
               </tbody>
             </table>
         </div>

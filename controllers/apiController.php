@@ -135,13 +135,15 @@ $app->get('/reservations', function () use ($app) {
     if (!isset($_SESSION['user']))
         $app->error(new apiException('Du må være innlogget.'));
 
-    /* Find reservations by currently authenticated user */
-    $reservations = R::find('reservations',
-        ' user_id = :userId', array (
-            ':userId' => $_SESSION['user']['id'],
-        )
-    );
+    /* Get (with left join) reservations by currently logged in user */
+    $query = R::getAll(
+        'select * from reservations left '.
+        'join cabins on cabins.id = reservations.id '.
+        'where user_id = :userId', array (
+        ':userId' => $_SESSION['user']['id']
+    ));
 
+    $reservations = R::convertToBeans('reservations', $query);
     echo json_encode (R::exportAll($reservations), true);
 
 });

@@ -27,8 +27,29 @@ $(document).ready(function () {
 
     function previousReservations () {
         $('.reservation-form').slideUp('slow');
-        $('.reservation-previous').slideDown("slow", function () {
 
+        $.getJSON('reservations', function (reservations) {
+
+            $('.reservation-previous').slideDown("slow", function () {
+
+                var reservationTable = $('table.reservation-table > tbody');
+                $(reservations).each(function (index, reservation) {
+
+                    $(reservationTable).append(
+                        '<tr >'  +
+                            '<td>'+ reservation.name +'</td>' +
+                            '<td>'+ reservation.to +'</td>' +
+                            '<td>'+ reservation.from +'</td>' +
+                            '<td class="report">' +
+                                '<button type="button" class="btn btn-xs btn-danger">'+
+                                    'Avlegg' +
+                                '</button>' +
+                            '</td>' +
+                        '</tr>'
+                    );
+
+                });
+            });
         });
     }
 
@@ -84,8 +105,6 @@ $(document).ready(function () {
                 animation: google.maps.Animation.DROP,
                 click: function (e) {
 
-
-
                     swal({
                         title: 'Reserver ' + cabin.name,
                         text: 'Ønsker du å lage en reservasjon?',
@@ -110,6 +129,4 @@ $(document).ready(function () {
             });
         });
     });
-
-
 })
