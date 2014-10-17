@@ -135,12 +135,13 @@ $app->get('/reservations', function () use ($app) {
     if (!isset($_SESSION['user']))
         $app->error(new apiException('Du må være innlogget.'));
 
-    /* Get (with left join) reservations by currently logged in user */
+    /* Get reservations which are in the past (by currently logged in user) */
     $query = R::getAll(
-        'select * from reservations left '.
+        'select * from reservations left '           .
         'join cabins on cabins.id = reservations.id '.
-        'where user_id = :userId', array (
-        ':userId' => $_SESSION['user']['id']
+        'where user_id = :userId and '               .
+        'UNIX_TIMESTAMP(reservations.to) <= unix_timestamp(now())', array (
+            ':userId' => $_SESSION['user']['id']
     ));
 
     $reservations = R::convertToBeans('reservations', $query);
