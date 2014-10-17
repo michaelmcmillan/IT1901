@@ -123,7 +123,6 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
 
     echo json_encode (array ('message' => 'success'), true);
 
-
 });
 
 /**
@@ -131,5 +130,18 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
  * - Returns an array of all previous reservation by the user
  */
 $app->get('/reservations', function () use ($app) {
-    
+
+    /* Must be authenticated */
+    if (!isset($_SESSION['user']))
+        $app->error(new apiException('Du må være innlogget.'));
+
+    /* Find reservations by currently authenticated user */
+    $reservations = R::find('reservations',
+        ' user_id = :userId', array (
+            ':userId' => $_SESSION['user']['id'],
+        )
+    );
+
+    echo json_encode (R::exportAll($reservations), true);
+
 });
