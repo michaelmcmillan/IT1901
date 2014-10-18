@@ -27,3 +27,7 @@ body {
     background-color: #18BC9C;
     border-color: #18BC9C;
 }
+
+.reservation-table > tbody > tr > td {
+    border-top: 1px solid #dddddd;
+}

@@ -123,5 +123,28 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
 
     echo json_encode (array ('message' => 'success'), true);
 
+});
+
+/**
+ * GET /reservations
+ * - Returns an array of all previous reservation by the user
+ */
+$app->get('/reservations', function () use ($app) {
+
+    /* Must be authenticated */
+    if (!isset($_SESSION['user']))
+        $app->error(new apiException('Du må være innlogget.'));
+
+    /* Get reservations which are in the past (by currently logged in user) */
+    $query = R::getAll(
+        'select * from reservations left '           .
+        'join cabins on cabins.id = reservations.id '.
+        'where user_id = :userId and '               .
+        'UNIX_TIMESTAMP(reservations.to) <= unix_timestamp(now())', array (
+            ':userId' => $_SESSION['user']['id']
+    ));
+
+    $reservations = R::convertToBeans('reservations', $query);
+    echo json_encode (R::exportAll($reservations), true);
 
 });

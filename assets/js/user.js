@@ -21,6 +21,39 @@ $(document).ready(function () {
     }
 
     /**
+     * View previous reservations
+     */
+    $('a#reservation-previous').click(previousReservations);
+
+    function previousReservations () {
+        $('.reservation-form').slideUp('slow');
+
+        $.getJSON('reservations', function (reservations) {
+
+            $('.reservation-previous').slideDown("slow", function () {
+
+                var reservationTable = $('table.reservation-table > tbody');
+                $(reservations).each(function (index, reservation) {
+
+                    $(reservationTable).append(
+                        '<tr >'  +
+                            '<td>'+ reservation.name +'</td>' +
+                            '<td>'+ reservation.to +'</td>' +
+                            '<td>'+ reservation.from +'</td>' +
+                            '<td class="report">' +
+                                '<button type="button" class="btn btn-xs btn-danger">'+
+                                    'Avlegg' +
+                                '</button>' +
+                            '</td>' +
+                        '</tr>'
+                    );
+
+                });
+            });
+        });
+    }
+
+    /**
      * Post reservation form
      */
     $('input[name="reserve"]').click(reserveCabin);
@@ -42,9 +75,6 @@ $(document).ready(function () {
             data: params
         })
         .fail(function(xhr) {
-
-            console.log();
-
             swal("Feil!", xhr.responseJSON.message, "error")
         })
         .success(function (data) {
@@ -75,8 +105,6 @@ $(document).ready(function () {
                 animation: google.maps.Animation.DROP,
                 click: function (e) {
 
-
-
                     swal({
                         title: 'Reserver ' + cabin.name,
                         text: 'Ønsker du å lage en reservasjon?',
@@ -89,6 +117,7 @@ $(document).ready(function () {
                     }, function () {
 
                         /* Hide reservation form if open */
+                        $('.reservation-previous').slideUp('slow');
                         $('.reservation-form').slideUp("slow", function () {
 
                             /* Open the new reservation form */
@@ -100,6 +129,4 @@ $(document).ready(function () {
             });
         });
     });
-
-
 })
