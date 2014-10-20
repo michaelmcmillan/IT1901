@@ -21,6 +21,16 @@ $(document).ready(function () {
     }
 
     /**
+     * Show report modal
+     */
+    $('table.reservation-table > tbody').on('click', 'button', function (event) {
+        var reservationId = $(event.target).attr('data-reservation');
+
+        $('.reservation-report').modal('show');
+
+    });
+
+    /**
      * View previous reservations
      */
     $('a#reservation-previous').click(previousReservations);
@@ -38,12 +48,14 @@ $(document).ready(function () {
                 $('.reservation-previous').slideDown("slow", function () {
                     $(reservations).each(function (index, reservation) {
                         $(reservationTable).append(
-                            '<tr >'  +
+                            '<tr>'  +
                                 '<td>'+ reservation.name +'</td>' +
                                 '<td>'+ reservation.to +'</td>' +
                                 '<td>'+ reservation.from +'</td>' +
                                 '<td class="report">' +
-                                    '<button type="button" class="btn btn-xs btn-danger">'+
+                                    '<button type="button" ' +
+                                            'class="btn btn-xs btn-danger" '+
+                                            'data-reservation="'+ reservation.id+ '">'+
                                         'Avlegg' +
                                     '</button>' +
                                 '</td>' +
