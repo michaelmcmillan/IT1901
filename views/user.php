@@ -26,7 +26,7 @@
     </div>
 
     <!-- Report a stay -->
-    <div class="modal reservation-report">
+    <div class="modal reservation-report fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
