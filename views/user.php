@@ -31,35 +31,37 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Modal title</h4>
+                    <h4 class="modal-title">Rapport</h4>
                 </div>
 
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-hover reservation-table">
-                              <thead>
-                                <tr>
-                                  <th>Inventar</th>
-                                  <th>Kommentar</th>
-                                  <th>Ødelagt</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                      <td>Piano</td>
-                                      <td><input type="text" class="form-control input-xs"></td>
-                                      <td>lol</td>
-                                  </tr>
-                              </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <p>
+                        Hvis noe ble ødelagt under oppholdet må det rapporteres under.
+                        Dersom du har noen kommentarer legger du det til.
+                    </p>
+
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>Inventar</th>
+                          <th>Kommentar</th>
+                          <th class="broken">Ødelagt</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>Piano</td>
+                              <td class="comment"><input type="text" class="form-control input-xs"></td>
+                              <td class="broken"><input type="checkbox"></td>
+                          </tr>
+                      </tbody>
+                    </table>
+
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
+                    <button type="button" class="btn btn-success">Lagre</button>
                 </div>
             </div>
         </div>
