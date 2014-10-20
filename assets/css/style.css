@@ -31,3 +31,11 @@ body {
 .reservation-table > tbody > tr > td {
     border-top: 1px solid #dddddd;
 }
+
+.input-xs {
+    height: 22px;
+    padding: 5px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
