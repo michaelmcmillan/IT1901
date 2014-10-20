@@ -140,8 +140,8 @@ $app->get('/reservations', function () use ($app) {
 
     /* Get reservations which are in the past (by currently logged in user) */
     $query = R::getAll(
-        'select * from reservations left '           .
-        'join cabins on cabins.id = reservations.cabin_id '.
+        'select reservations.*, cabins.name from reservations left '.
+        'join cabins on reservations.cabin_id = cabins.id '.
         'where user_id = :userId and '               .
         'UNIX_TIMESTAMP(reservations.to) <= unix_timestamp(now())', array (
             ':userId' => $_SESSION['user']['id']
