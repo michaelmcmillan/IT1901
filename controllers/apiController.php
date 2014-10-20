@@ -97,11 +97,11 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
     $from    =           $app->request->post('from');
     $to      =           $app->request->post('to');
 
-    if (strtotime($from) >= strtotime($to))
-        $app->error(new apiException('Oppholdets start må være før oppholdets slutt.'));
-
     if (!$from || !$to || !$beds)
         $app->error(new apiException('Du må velge noe på alle feltene.'));
+
+    if (strtotime($from) >= strtotime($to))
+        $app->error(new apiException('Oppholdets start må være før oppholdets slutt.'));
 
     if ($beds < 1)
         $app->error(new apiException('Du må reservere minst èn seng.'));
