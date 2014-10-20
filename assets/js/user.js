@@ -45,23 +45,24 @@ $(document).ready(function () {
             if (reservations.length === 0)
                 swal('Feil!', 'Du har ingen tidligere reservasjoner', "error");
             else
-                $('.reservation-previous').slideDown("slow", function () {
-                    $(reservations).each(function (index, reservation) {
-                        $(reservationTable).append(
-                            '<tr>'  +
-                                '<td>'+ reservation.name +'</td>' +
-                                '<td>'+ reservation.to +'</td>' +
-                                '<td>'+ reservation.from +'</td>' +
-                                '<td class="report">' +
-                                    '<button type="button" ' +
-                                            'class="btn btn-xs btn-danger" '+
-                                            'data-reservation="'+ reservation.id+ '">'+
-                                        'Avlegg' +
-                                    '</button>' +
-                                '</td>' +
-                            '</tr>'
-                        );
-                    });
+                $(reservations).each(function (index, reservation) {
+                    $(reservationTable).append(
+                        '<tr>'  +
+                            '<td>'+ reservation.name +'</td>' +
+                            '<td>'+ reservation.to +'</td>' +
+                            '<td>'+ reservation.from +'</td>' +
+                            '<td class="report">' +
+                                '<button type="button" ' +
+                                        'class="btn btn-xs btn-danger" '+
+                                        'data-reservation="'+ reservation.id+ '">'+
+                                    'Avlegg' +
+                                '</button>' +
+                            '</td>' +
+                        '</tr>'
+                    );
+
+                    if (index == reservations.length - 1)
+                        $('.reservation-previous').slideDown("slow");
                 });
         });
     }
