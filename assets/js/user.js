@@ -24,10 +24,25 @@ $(document).ready(function () {
      * Show report modal
      */
     $('table.reservation-table > tbody').on('click', 'button', function (event) {
+
         var reservationId = $(event.target).attr('data-reservation');
+        var cabinId       = $(event.target).attr('data-cabin');
+        $('.report-inventory').children('tr').remove();
 
-        $('.reservation-report').modal('show');
+        $.getJSON('cabins/'+ cabinId +'/inventory', function (inventories) {
+            $(inventories).each(function (index, inventory) {
+                $('.report-inventory').append(
+                    '<tr>' +
+                        '<td>'+inventory.name+'</td>' +
+                        '<td class="comment"><input type="text" class="form-control input-xs"></td>' +
+                        '<td class="broken"><input type="checkbox"></td>' +
+                    '</tr>'
+                );
 
+            if (index === inventories.length -1)
+                $('.reservation-report').modal('show');
+            });
+        });
     });
 
     /**
@@ -54,7 +69,8 @@ $(document).ready(function () {
                             '<td class="report">' +
                                 '<button type="button" ' +
                                         'class="btn btn-xs btn-danger" '+
-                                        'data-reservation="'+ reservation.id+ '">'+
+                                        'data-reservation="'+ reservation.id+ '" '+
+                                        'data-cabin="'+ reservation.cabin_id+'">' +
                                     'Avlegg' +
                                 '</button>' +
                             '</td>' +
