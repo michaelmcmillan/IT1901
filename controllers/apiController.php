@@ -24,10 +24,6 @@ $isAvailable = function ($cabinId, $from, $to, $beds) use ($app) {
         )
     ));
 
-    /* Must be available if no reservations were found */
-    if (!$reservations)
-        return true;
-
     /* Find if collision between reservations */
     $reservationCollisions = array ();
     foreach ($reservations as $key => $reservation) {
@@ -51,25 +47,26 @@ $isAvailable = function ($cabinId, $from, $to, $beds) use ($app) {
         }
     }
 
-    /* If any collisions were found, see if there's enough beds */
-    if (empty($reservationCollisions) == false) {
+    /* Presume no beds are taken */
+    $bedsAlreadyTaken = 0;
 
-        /* Find how many beds are already taken */
-        $bedsAlreadyTaken = 0;
+    /* But if collisions were found, find how many beds are already taken */
+    if (empty($reservationCollisions) == false) {
         foreach ($reservationCollisions as $reservation) {
             $bedsAlreadyTaken += $reservation['beds'];
         }
+    }
 
-        /* Find the total amount of beds on selected cabin */
-        $cabin = R::load('cabins', $cabinId);
-        $totalBedsAtCabin = $cabin->beds;
+    /* Find the total amount of beds on selected cabin */
+    $cabin = R::load('cabins', $cabinId);
+    $totalBedsAtCabin = $cabin->beds;
 
-        /* Are we going over the total available beds with new reservation */
-        if ($bedsAlreadyTaken + $beds > $totalBedsAtCabin)
-            $app->error(new apiException(
-                'Det er '.($totalBedsAtCabin - $bedsAlreadyTaken).' ledige ' .
-                'seng(er) igjen.'
-            ));
+    /* Are we exceeding the total available beds with new reservation */
+    if ($bedsAlreadyTaken + $beds > $totalBedsAtCabin) {
+        $app->error(new apiException(
+            'Det er kun '.($totalBedsAtCabin - $bedsAlreadyTaken).' ledige ' .
+            'seng(er) igjen.'
+        ));
     }
 
     /* It's safe to allow the reservation */
