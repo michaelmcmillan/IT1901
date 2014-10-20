@@ -149,13 +149,39 @@ $app->get('/reservations', function () use ($app) {
 
 });
 
+
 /**
- * GET /cabins
- * - Returns an array of all cabin-objects
+ * POST /reservations/:id/report
+ * - Stores a report for a given reservation
+ */
+$app->post('/reservations/:reservationId/report', function ($reservationId) use ($app) {
+    $app->response->headers->set('Content-Type', 'application/json');
+
+    /* Must be authenticated */
+    if (!isset($_SESSION['user']))
+        $app->error(new apiException('Du må være innlogget.'));
+
+    /* The reservation requested must exist */
+    $reservation = R::load('reservations', (int) $reservationId);
+
+    if (empty($reservation))
+        $app->error(new apiException('Ugyldig reservasjon.'));
+
+    /* A user can only report on a reservation belonging to himself or herself */
+    if ($reservation->userId !== $_SESSION['user']['id'])
+        $app->error(new apiException('Du har ikke lov til å rapportere på dette oppholdet.'));
+
+    
+
+});
+
+/**
+ * GET /cabins/:id/inventory
+ * - Returns an array of all inventory for a cabin
  */
 $app->get('/cabins/:cabinId/inventory', function ($cabinId) use ($app) {
     $app->response->headers->set('Content-Type', 'application/json');
-    
+
     $query = R::getAll(
         'select inventory_status.*, inventory.name from inventory_status left '.
         'join inventory on inventory_status.inventory_id = inventory.id '.
@@ -165,7 +191,4 @@ $app->get('/cabins/:cabinId/inventory', function ($cabinId) use ($app) {
 
     $inventory = R::convertToBeans('inventory_status', $query);
     echo json_encode (R::exportAll($inventory), true);
-
-
-    //echo json_encode (R::exportAll($cabins), true);
 });
