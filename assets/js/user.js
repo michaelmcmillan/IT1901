@@ -29,29 +29,28 @@ $(document).ready(function () {
         var reservationTable = $('table.reservation-table > tbody');
         $('.reservation-form').slideUp('slow');
         $(reservationTable).children('tr').remove();
-        
+
         $.getJSON('reservations', function (reservations) {
 
-            $('.reservation-previous').slideDown("slow", function () {
-
-
-                $(reservations).each(function (index, reservation) {
-
-                    $(reservationTable).append(
-                        '<tr >'  +
-                            '<td>'+ reservation.name +'</td>' +
-                            '<td>'+ reservation.to +'</td>' +
-                            '<td>'+ reservation.from +'</td>' +
-                            '<td class="report">' +
-                                '<button type="button" class="btn btn-xs btn-danger">'+
-                                    'Avlegg' +
-                                '</button>' +
-                            '</td>' +
-                        '</tr>'
-                    );
-
+            if (reservations.length === 0)
+                swal('Feil!', 'Du har ingen tidligere reservasjoner', "error");
+            else
+                $('.reservation-previous').slideDown("slow", function () {
+                    $(reservations).each(function (index, reservation) {
+                        $(reservationTable).append(
+                            '<tr >'  +
+                                '<td>'+ reservation.name +'</td>' +
+                                '<td>'+ reservation.to +'</td>' +
+                                '<td>'+ reservation.from +'</td>' +
+                                '<td class="report">' +
+                                    '<button type="button" class="btn btn-xs btn-danger">'+
+                                        'Avlegg' +
+                                    '</button>' +
+                                '</td>' +
+                            '</tr>'
+                        );
+                    });
                 });
-            });
         });
     }
 
