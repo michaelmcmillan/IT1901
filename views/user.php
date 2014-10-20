@@ -37,7 +37,9 @@
                 <div class="modal-body">
                     <p>
                         Hvis noe ble ødelagt under oppholdet må det rapporteres under.
-                        Dersom du har noen kommentarer legger du det til.
+                    <br/>
+                        Dersom dere delte koien med noen andre skal kun den som var ansvarlig
+                        for at noe ble ødelagt rapportere dette.
                     </p>
 
                     <table class="table table-hover">
