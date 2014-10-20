@@ -27,12 +27,14 @@ $(document).ready(function () {
 
         var reservationId = $(event.target).attr('data-reservation');
         var cabinId       = $(event.target).attr('data-cabin');
+
+        $('.reservation-report').attr('data-reservation', reservationId);
         $('.report-inventory').children('tr').remove();
 
         $.getJSON('cabins/'+ cabinId +'/inventory', function (inventories) {
             $(inventories).each(function (index, inventory) {
                 $('.report-inventory').append(
-                    '<tr>' +
+                    '<tr data-inventory-status-id="'+inventory.id+'">' +
                         '<td>'+inventory.name+'</td>' +
                         '<td class="comment">' +
                             '<input type="text" class="form-control input-xs">'+
@@ -45,6 +47,38 @@ $(document).ready(function () {
                 $('.reservation-report').modal('show');
             });
         });
+    });
+
+    /**
+     * Save report
+     */
+    $('button.save-report').click(function () {
+
+        var reservationId = $('.reservation-report').attr('data-reservation');
+        var report = [];
+
+        $('.report-inventory > tr').each (function (index, row) {
+            report.push({
+                statusId: parseInt($(row).attr('data-inventory-status-id')),
+                comment : $(row).find('.comment > input').val(),
+                broken  : $(row).find('.broken > input').is(':checked')
+            });
+        });
+
+        $.ajax ({
+            type: 'post',
+            url : 'reservations/'+reservationId+'/report',
+            data: JSON.stringify(report),
+            contentType: "application/json",
+        })
+        .fail(function(xhr) {
+            swal("Feil!", xhr.responseJSON.message, "error")
+        })
+        .success(function (data) {
+            swal("Reservert!", "Koien er herved reservert", "success")
+        });
+
+
     });
 
     /**
