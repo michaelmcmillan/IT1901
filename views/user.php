@@ -59,7 +59,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
-                    <button type="button" class="btn btn-success">Lagre</button>
+                    <button type="button" class="btn btn-success save-report">Lagre</button>
                 </div>
             </div>
         </div>
