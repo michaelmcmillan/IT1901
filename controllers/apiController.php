@@ -148,3 +148,24 @@ $app->get('/reservations', function () use ($app) {
     echo json_encode (R::exportAll($reservations), true);
 
 });
+
+/**
+ * GET /cabins
+ * - Returns an array of all cabin-objects
+ */
+$app->get('/cabins/:cabinId/inventory', function ($cabinId) use ($app) {
+    $app->response->headers->set('Content-Type', 'application/json');
+    
+    $query = R::getAll(
+        'select inventory_status.*, inventory.name from inventory_status left '.
+        'join inventory on inventory_status.inventory_id = inventory.id '.
+        'where inventory_status.cabin_id = :cabinId', array (
+            ':cabinId' => (int) $cabinId
+    ));
+
+    $inventory = R::convertToBeans('inventory_status', $query);
+    echo json_encode (R::exportAll($inventory), true);
+
+
+    //echo json_encode (R::exportAll($cabins), true);
+});
