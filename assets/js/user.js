@@ -34,7 +34,9 @@ $(document).ready(function () {
                 $('.report-inventory').append(
                     '<tr>' +
                         '<td>'+inventory.name+'</td>' +
-                        '<td class="comment"><input type="text" class="form-control input-xs"></td>' +
+                        '<td class="comment">' +
+                            '<input type="text" class="form-control input-xs">'+
+                        '</td>' +
                         '<td class="broken"><input type="checkbox"></td>' +
                     '</tr>'
                 );
