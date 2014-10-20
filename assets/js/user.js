@@ -26,13 +26,15 @@ $(document).ready(function () {
     $('a#reservation-previous').click(previousReservations);
 
     function previousReservations () {
+        var reservationTable = $('table.reservation-table > tbody');
         $('.reservation-form').slideUp('slow');
-
+        $(reservationTable).children('tr').remove();
+        
         $.getJSON('reservations', function (reservations) {
 
             $('.reservation-previous').slideDown("slow", function () {
 
-                var reservationTable = $('table.reservation-table > tbody');
+
                 $(reservations).each(function (index, reservation) {
 
                     $(reservationTable).append(
