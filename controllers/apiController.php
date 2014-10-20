@@ -171,7 +171,16 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
     if ($reservation->userId !== $_SESSION['user']['id'])
         $app->error(new apiException('Du har ikke lov til å rapportere på dette oppholdet.'));
 
-    
+    /* Retrieve the JSON payload and store each field in the reports table */
+    $reportFields = json_decode($app->request->getBody(), true);
+    foreach ($reportFields as $reportField) {
+        $report = R::dispense('reports');
+        $report->reservationId = (int)  $reservationId;
+        $report->inventoryId   = (int)  $reportField['statusId'];
+        $report->broken        = (bool) $reportField['broken'];
+        $report->comment       =        $reportField['comment'];
+        R::store($report);
+    }
 
 });
 
