@@ -50,12 +50,8 @@
                           <th class="broken">Ødelagt</th>
                         </tr>
                       </thead>
-                      <tbody>
-                          <tr>
-                              <td>Piano</td>
-                              <td class="comment"><input type="text" class="form-control input-xs"></td>
-                              <td class="broken"><input type="checkbox"></td>
-                          </tr>
+                      <tbody class="report-inventory">
+                          <!-- Inventory for the given cabin will be injected here -->
                       </tbody>
                     </table>
 
