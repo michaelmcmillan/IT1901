@@ -25,6 +25,48 @@
         </div>
     </div>
 
+    <!-- Report a stay -->
+    <div class="modal reservation-report fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Rapport</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        Hvis noe ble ødelagt under oppholdet må det rapporteres under.
+                    <br/>
+                        Dersom dere delte koien med noen andre skal kun den som var ansvarlig
+                        for at noe ble ødelagt rapportere dette.
+                    </p>
+
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>Inventar</th>
+                          <th>Kommentar</th>
+                          <th class="broken">Ødelagt</th>
+                        </tr>
+                      </thead>
+                      <tbody class="report-inventory">
+                          <!-- Inventory for the given cabin will be injected here -->
+                      </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
+                    <button type="button" class="btn btn-success save-report">Lagre</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- Previous reservations list -->
     <div class="row reservation-previous" style="display:none;">
         <div class="col-md-12">
@@ -42,7 +84,6 @@
               </tbody>
             </table>
         </div>
-
     </div>
 
     <!-- Reservation form -->

@@ -24,10 +24,6 @@ $isAvailable = function ($cabinId, $from, $to, $beds) use ($app) {
         )
     ));
 
-    /* Must be available if no reservations were found */
-    if (!$reservations)
-        return true;
-
     /* Find if collision between reservations */
     $reservationCollisions = array ();
     foreach ($reservations as $key => $reservation) {
@@ -51,25 +47,26 @@ $isAvailable = function ($cabinId, $from, $to, $beds) use ($app) {
         }
     }
 
-    /* If any collisions were found, see if there's enough beds */
-    if (empty($reservationCollisions) == false) {
+    /* Presume no beds are taken */
+    $bedsAlreadyTaken = 0;
 
-        /* Find how many beds are already taken */
-        $bedsAlreadyTaken = 0;
+    /* But if collisions were found, find how many beds are already taken */
+    if (empty($reservationCollisions) == false) {
         foreach ($reservationCollisions as $reservation) {
             $bedsAlreadyTaken += $reservation['beds'];
         }
+    }
 
-        /* Find the total amount of beds on selected cabin */
-        $cabin = R::load('cabins', $cabinId);
-        $totalBedsAtCabin = $cabin->beds;
+    /* Find the total amount of beds on selected cabin */
+    $cabin = R::load('cabins', $cabinId);
+    $totalBedsAtCabin = $cabin->beds;
 
-        /* Are we going over the total available beds with new reservation */
-        if ($bedsAlreadyTaken + $beds > $totalBedsAtCabin)
-            $app->error(new apiException(
-                'Det er '.($totalBedsAtCabin - $bedsAlreadyTaken).' ledige ' .
-                'seng(er) igjen.'
-            ));
+    /* Are we exceeding the total available beds with new reservation */
+    if ($bedsAlreadyTaken + $beds > $totalBedsAtCabin) {
+        $app->error(new apiException(
+            'Det er kun '.($totalBedsAtCabin - $bedsAlreadyTaken).' ledige ' .
+            'seng(er) igjen.'
+        ));
     }
 
     /* It's safe to allow the reservation */
@@ -102,6 +99,9 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
 
     if (!$from || !$to || !$beds)
         $app->error(new apiException('Du må velge noe på alle feltene.'));
+
+    if (strtotime($from) >= strtotime($to))
+        $app->error(new apiException('Oppholdets start må være før oppholdets slutt.'));
 
     if ($beds < 1)
         $app->error(new apiException('Du må reservere minst èn seng.'));
@@ -137,8 +137,8 @@ $app->get('/reservations', function () use ($app) {
 
     /* Get reservations which are in the past (by currently logged in user) */
     $query = R::getAll(
-        'select * from reservations left '           .
-        'join cabins on cabins.id = reservations.id '.
+        'select reservations.*, cabins.name from reservations left '.
+        'join cabins on reservations.cabin_id = cabins.id '.
         'where user_id = :userId and '               .
         'UNIX_TIMESTAMP(reservations.to) <= unix_timestamp(now())', array (
             ':userId' => $_SESSION['user']['id']
@@ -147,4 +147,57 @@ $app->get('/reservations', function () use ($app) {
     $reservations = R::convertToBeans('reservations', $query);
     echo json_encode (R::exportAll($reservations), true);
 
+});
+
+
+/**
+ * POST /reservations/:id/report
+ * - Stores a report for a given reservation
+ */
+$app->post('/reservations/:reservationId/report', function ($reservationId) use ($app) {
+    $app->response->headers->set('Content-Type', 'application/json');
+
+    /* Must be authenticated */
+    if (!isset($_SESSION['user']))
+        $app->error(new apiException('Du må være innlogget.'));
+
+    /* The reservation requested must exist */
+    $reservation = R::load('reservations', (int) $reservationId);
+
+    if (empty($reservation))
+        $app->error(new apiException('Ugyldig reservasjon.'));
+
+    /* A user can only report on a reservation belonging to himself or herself */
+    if ($reservation->userId !== $_SESSION['user']['id'])
+        $app->error(new apiException('Du har ikke lov til å rapportere på dette oppholdet.'));
+
+    /* Retrieve the JSON payload and store each field in the reports table */
+    $reportFields = json_decode($app->request->getBody(), true);
+    foreach ($reportFields as $reportField) {
+        $report = R::dispense('reports');
+        $report->reservationId = (int)  $reservationId;
+        $report->inventoryId   = (int)  $reportField['statusId'];
+        $report->broken        = (bool) $reportField['broken'];
+        $report->comment       =        $reportField['comment'];
+        R::store($report);
+    }
+
+});
+
+/**
+ * GET /cabins/:id/inventory
+ * - Returns an array of all inventory for a cabin
+ */
+$app->get('/cabins/:cabinId/inventory', function ($cabinId) use ($app) {
+    $app->response->headers->set('Content-Type', 'application/json');
+
+    $query = R::getAll(
+        'select inventory_status.*, inventory.name from inventory_status left '.
+        'join inventory on inventory_status.inventory_id = inventory.id '.
+        'where inventory_status.cabin_id = :cabinId', array (
+            ':cabinId' => (int) $cabinId
+    ));
+
+    $inventory = R::convertToBeans('inventory_status', $query);
+    echo json_encode (R::exportAll($inventory), true);
 });

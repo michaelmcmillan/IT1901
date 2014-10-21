@@ -21,35 +21,101 @@ $(document).ready(function () {
     }
 
     /**
+     * Show report modal
+     */
+    $('table.reservation-table > tbody').on('click', 'button', function (event) {
+
+        var reservationId = $(event.target).attr('data-reservation');
+        var cabinId       = $(event.target).attr('data-cabin');
+
+        $('.reservation-report').attr('data-reservation', reservationId);
+        $('.report-inventory').children('tr').remove();
+
+        $.getJSON('cabins/'+ cabinId +'/inventory', function (inventories) {
+            $(inventories).each(function (index, inventory) {
+                $('.report-inventory').append(
+                    '<tr data-inventory-status-id="'+inventory.id+'">' +
+                        '<td>'+inventory.name+'</td>' +
+                        '<td class="comment">' +
+                            '<input type="text" class="form-control input-xs">'+
+                        '</td>' +
+                        '<td class="broken"><input type="checkbox"></td>' +
+                    '</tr>'
+                );
+
+            if (index === inventories.length -1)
+                $('.reservation-report').modal('show');
+            });
+        });
+    });
+
+    /**
+     * Save report
+     */
+    $('button.save-report').click(function () {
+
+        var reservationId = $('.reservation-report').attr('data-reservation');
+        var report = [];
+
+        $('.report-inventory > tr').each (function (index, row) {
+            report.push({
+                statusId: parseInt($(row).attr('data-inventory-status-id')),
+                comment : $(row).find('.comment > input').val(),
+                broken  : $(row).find('.broken > input').is(':checked')
+            });
+        });
+
+        $.ajax ({
+            type: 'post',
+            url : 'reservations/'+reservationId+'/report',
+            data: JSON.stringify(report),
+            contentType: "application/json",
+        })
+        .fail(function(xhr) {
+            swal("Feil!", xhr.responseJSON.message, "error")
+        })
+        .success(function (data) {
+            swal("Reservert!", "Koien er herved reservert", "success")
+        });
+
+
+    });
+
+    /**
      * View previous reservations
      */
     $('a#reservation-previous').click(previousReservations);
 
     function previousReservations () {
+        var reservationTable = $('table.reservation-table > tbody');
         $('.reservation-form').slideUp('slow');
+        $(reservationTable).children('tr').remove();
 
         $.getJSON('reservations', function (reservations) {
 
-            $('.reservation-previous').slideDown("slow", function () {
-
-                var reservationTable = $('table.reservation-table > tbody');
+            if (reservations.length === 0)
+                swal('Feil!', 'Du har ingen tidligere reservasjoner', "error");
+            else
                 $(reservations).each(function (index, reservation) {
-
                     $(reservationTable).append(
-                        '<tr >'  +
+                        '<tr>'  +
                             '<td>'+ reservation.name +'</td>' +
                             '<td>'+ reservation.to +'</td>' +
                             '<td>'+ reservation.from +'</td>' +
                             '<td class="report">' +
-                                '<button type="button" class="btn btn-xs btn-danger">'+
+                                '<button type="button" ' +
+                                        'class="btn btn-xs btn-danger" '+
+                                        'data-reservation="'+ reservation.id+ '" '+
+                                        'data-cabin="'+ reservation.cabin_id+'">' +
                                     'Avlegg' +
                                 '</button>' +
                             '</td>' +
                         '</tr>'
                     );
 
+                    if (index == reservations.length - 1)
+                        $('.reservation-previous').slideDown("slow");
                 });
-            });
         });
     }
 
