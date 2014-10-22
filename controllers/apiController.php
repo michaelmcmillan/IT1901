@@ -163,9 +163,14 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
 
     /* The reservation requested must exist */
     $reservation = R::load('reservations', (int) $reservationId);
-
     if (empty($reservation))
         $app->error(new apiException('Ugyldig reservasjon.'));
+
+    /* There can not exist a previous report on this reservation (one-to-one) */
+    if (R::findOne('reports', ' reservation_id = ?', array ($reservationId)))
+        $app->error(new apiException('Det finnes allerede en rapport for denne ' .
+            'reservasjonen.'
+        ));
 
     /* A user can only report on a reservation belonging to himself or herself */
     if ($reservation->userId !== $_SESSION['user']['id'])
@@ -182,6 +187,7 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
         R::store($report);
     }
 
+    echo json_encode (array ('message' => 'success'), true);
 });
 
 /**
