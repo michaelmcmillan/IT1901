@@ -140,7 +140,7 @@ $app->get('/reservations', function () use ($app) {
         'select reservations.*, cabins.name from reservations left '.
         'join cabins on reservations.cabin_id = cabins.id '.
         'where user_id = :userId and '               .
-        'UNIX_TIMESTAMP(reservations.to) <= unix_timestamp(now())', array (
+        'unix_timestamp(reservations.to) <= unix_timestamp(now())', array (
             ':userId' => $_SESSION['user']['id']
     ));
 
