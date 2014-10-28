@@ -34,7 +34,11 @@ $app->get('/', $authenticateFor(), function () use ($app) {
 $app->get('/authenticate', function () use ($app) {
     $app->render('header.php', array ('url' => $app->config('url')));
     $app->render('login.php');
-    $app->render('footer.php', array ('url' => $app->config('url')));
+    $app->render('footer.php', array (
+        'url'   => $app->config('url'),
+        'user'  => false,
+        'admin' => false
+    ));
 });
 
 /**
