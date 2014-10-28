@@ -18,8 +18,9 @@ R::setup('mysql:host='.$config['host'].';dbname='.$config['db'],
 
 session_start ();
 
-require 'controllers/serverController.php';
 require 'controllers/authenticationController.php';
+require 'controllers/serverController.php';
+requrie 'controllers/adminController.php';
 require 'controllers/userController.php';
 require 'controllers/apiController.php';
 
