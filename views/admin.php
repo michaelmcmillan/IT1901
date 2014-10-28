@@ -6,9 +6,9 @@
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Administrer</span>
+              <span class="sr-only">Administrasjon</span>
             </button>
-            <a class="navbar-brand" href="#">Administrer</a>
+            <a class="navbar-brand" href="#">Administrasjon</a>
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
