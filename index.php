@@ -20,7 +20,7 @@ session_start ();
 
 require 'controllers/authenticationController.php';
 require 'controllers/serverController.php';
-requrie 'controllers/adminController.php';
+require 'controllers/adminController.php';
 require 'controllers/userController.php';
 require 'controllers/apiController.php';
 
