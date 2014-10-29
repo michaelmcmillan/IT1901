@@ -207,3 +207,31 @@ $app->get('/cabins/:cabinId/inventory', function ($cabinId) use ($app) {
     $inventory = R::convertToBeans('inventory_status', $query);
     echo json_encode (R::exportAll($inventory), true);
 });
+
+/**
+ * GET /cabins/:id/status
+ * - Returns a status for a provided cabin
+ */
+$app->get('/cabins/:cabinId/status', function ($cabinId) use ($app) {
+    //$app->response->headers->set('Content-Type', 'application/json');
+
+    /* Must be an administrator */
+    if (!isset($_SESSION['user']))
+        $app->error(new apiException('Du må være administrator for dette.'));
+
+    /*  */
+    $query = R::getAll(
+        'select * from reservations '.
+            'left join reports on   reports.reservation_id = reservations.id '.
+            'left join inventory on reports.inventory_id   = inventory.id '.
+        'where reservations.cabin_id = :cabinId', array (
+            ':cabinId' => (int) $cabinId
+    ));
+
+    echo '<pre>';
+    print_r(R::exportAll(R::convertToBeans('inventory_status', $query)));
+
+
+    //$inventory = R::convertToBeans('inventory_status', $query);
+    //echo json_encode (R::exportAll($inventory), true);
+});
