@@ -1,13 +1,35 @@
 
 $(document).ready(function () {
     /**
-     * Generate reservation form
+     * Generate status form
      */
-    function reserveForm (cabin) {
-        $('.reservation-form').slideDown ("slow", function () {
+    function statusForm (cabin) {
 
+        $.getJSON('cabins/'+ cabin.id +'/status')
+        .success(function(inventories) {
+            $('.status-form').slideDown ("slow", function () {
 
+                $('h3#cabin').text('Status for ' + cabin.name);
+                $('.report-inventory').children('tr').remove();
 
+                $(inventories).each(function (index, inventory) {
+                    if (inventory.broken == '1')  broken = 'checked';
+                    else                   broken = '';
+
+                    $('.report-inventory').append(
+                        '<tr data-inventory-status-id="'+inventory.id+'">'+
+                            '<td>'+inventory.name+'</td>' +
+                            '<td class="comment">' +
+                                '<input type="text" class="form-control input-xs" value="'+inventory.comment+'">'+
+                            '</td>' +
+                            '<td class="broken"><input type="checkbox" '+broken+'></td>' +
+                        '</tr>'
+                    );
+                });
+            });
+        })
+        .fail(function(xhr) {
+            swal("Feil!", xhr.responseJSON.message, "error")
         });
     }
 
@@ -101,7 +123,7 @@ $(document).ready(function () {
                 title: cabin.name,
                 animation: google.maps.Animation.DROP,
                 click: function (e) {
-                    
+                    statusForm(cabin);
                 }
             });
         });

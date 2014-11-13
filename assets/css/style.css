@@ -15,7 +15,7 @@ body {
     padding: 0px
 }
 
-.reservation-form {
+.reservation-form, .status-form {
     margin-top:20px;
 }
 

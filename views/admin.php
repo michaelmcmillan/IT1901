@@ -25,6 +25,26 @@
         </div>
     </div>
 
+    <!-- Reservation form -->
+    <div class="row status-form" style="display:none;">
+        <div class="col-md-12">
+            <h3 id="cabin"></h3>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Inventar</th>
+                        <th>Kommentar</th>
+                        <th class="broken">Ødelagt</th>
+                    </tr>
+                </thead>
+                <tbody class="report-inventory">
+                    <!-- Inventory gets injected here -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
     <!-- Previous reservations list -->
     <div class="row reservation-previous" style="display:none;">
         <div class="col-md-12">

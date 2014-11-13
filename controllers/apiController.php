@@ -221,25 +221,34 @@ $app->get('/cabins/:cabinId/inventory', function ($cabinId) use ($app) {
  * - Returns a status for a provided cabin
  */
 $app->get('/cabins/:cabinId/status', function ($cabinId) use ($app) {
-    //$app->response->headers->set('Content-Type', 'application/json');
+    $app->response->headers->set('Content-Type', 'application/json');
 
     /* Must be an administrator */
     if (!isset($_SESSION['user']))
         $app->error(new apiException('Du må være administrator for dette.'));
 
-    /*  */
+    /* Return the last report for the given cabin */
     $query = R::getAll(
         'select * from reservations '.
-            'left join reports on   reports.reservation_id = reservations.id '.
+            'left join reports   on reports.reservation_id = reservations.id '.
             'left join inventory on reports.inventory_id   = inventory.id '.
-        'where reservations.cabin_id = :cabinId', array (
+        'where reservations.cabin_id = :cabinId '.
+        'and   reservations.to       < now()', array (
             ':cabinId' => (int) $cabinId
     ));
 
-    echo '<pre>';
-    print_r(R::exportAll(R::convertToBeans('inventory_status', $query)));
+    /* Return the objects as json*/
+    $reports = R::convertToBeans('inventory_status', $query);
 
+    /* Filter away unsubmitted reports */
+    $reportsToReturn = array ();
+    foreach (R::exportAll($reports) as $report)
+        if (!empty($report['name']))
+            $reportsToReturn[] = $report;
 
-    //$inventory = R::convertToBeans('inventory_status', $query);
-    //echo json_encode (R::exportAll($inventory), true);
+    /* If no reports were found throw exception */
+    if (empty($reportsToReturn))
+        throw new apiException ('Denne koien har ingen rapporter.');
+
+    echo json_encode ($reportsToReturn, true);
 });
