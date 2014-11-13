@@ -2,6 +2,8 @@
 /**
  * Bootstrap
  */
+date_default_timezone_set('Europe/Oslo');
+
 require 'vendor/autoload.php';
 require 'rb.php';
 require 'configuration.php';
@@ -15,8 +17,6 @@ $app->config(array(
 
 R::setup('mysql:host='.$config['host'].';dbname='.$config['db'],
     $config['user'], $config['pass']);
-
-date_default_timezone_set('Europe/Oslo');
 
 session_start ();
 
