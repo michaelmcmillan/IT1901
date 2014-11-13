@@ -16,6 +16,8 @@ $app->config(array(
 R::setup('mysql:host='.$config['host'].';dbname='.$config['db'],
     $config['user'], $config['pass']);
 
+date_default_timezone_set('Europe/Oslo');
+
 session_start ();
 
 require 'controllers/authenticationController.php';
