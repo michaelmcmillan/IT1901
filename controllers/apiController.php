@@ -63,10 +63,18 @@ $isAvailable = function ($cabinId, $from, $to, $beds) use ($app) {
 
     /* Are we exceeding the total available beds with new reservation */
     if ($bedsAlreadyTaken + $beds > $totalBedsAtCabin) {
-        $app->error(new apiException(
-            'Det er kun '.($totalBedsAtCabin - $bedsAlreadyTaken).' ledige ' .
-            'seng(er) igjen.'
-        ));
+        $availableBedsLeft = $totalBedsAtCabin - $bedsAlreadyTaken;
+
+        if ($availableBedsLeft > 0)
+            $app->error(new apiException(
+                'Det er kun '. $availableBedsLeft .' ledige ' .
+                'seng(er) igjen.'
+            ));
+        else
+            $app->error(new apiException(
+                'Det er dessverre ingen ledige ' .
+                'senger igjen på denne koien.'
+            ));
     }
 
     /* It's safe to allow the reservation */
