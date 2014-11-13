@@ -68,8 +68,15 @@ $isAvailable = function ($cabinId, $from, $to, $beds) use ($app) {
         if ($availableBedsLeft > 0)
             $app->error(new apiException(
                 'Det er kun '. $availableBedsLeft .' ledige ' .
-                'seng(er) igjen.'
+                'senger igjen.'
             ));
+
+        elseif ($availableBedsLeft == 1)
+            $app->error(new apiException(
+                'Det er kun '. $availableBedsLeft .' ledig ' .
+                'seng igjen.'
+            ));
+
         else
             $app->error(new apiException(
                 'Det er dessverre ingen ledige ' .
@@ -176,9 +183,7 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
 
     /* There can not exist a previous report on this reservation (one-to-one) */
     if (R::findOne('reports', ' reservation_id = ?', array ($reservationId)))
-        $app->error(new apiException('Det finnes allerede en rapport for denne ' .
-            'reservasjonen.'
-        ));
+        $app->error(new apiException('Det finnes allerede en rapport for denne reservasjonen.'));
 
     /* A user can only report on a reservation belonging to himself or herself */
     if ($reservation->userId !== $_SESSION['user']['id'])
