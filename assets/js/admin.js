@@ -62,7 +62,7 @@ $(document).ready(function () {
             swal("Feil!", xhr.responseJSON.message, "error")
         })
         .success(function (data) {
-            swal("Reservert!", "Inventaret for koien er oppdatert", "success")
+            swal("Oppdatert!", "Inventaret for koien er oppdatert", "success")
         });
 
 
@@ -114,6 +114,8 @@ $(document).ready(function () {
         $.getJSON('reservations', function (reservations) {
 
         });
+
+
     }
 
 
