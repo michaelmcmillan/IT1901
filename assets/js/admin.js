@@ -13,8 +13,11 @@ $(document).ready(function () {
                 $('.report-inventory').children('tr').remove();
 
                 $(inventories).each(function (index, inventory) {
+
                     if (inventory.broken == '1')  broken = 'checked';
                     else                   broken = '';
+
+                    $('.report-inventory').attr('data-reservation', inventory.reservation_id);
 
                     $('.report-inventory').append(
                         '<tr data-inventory-status-id="'+inventory.id+'">'+
@@ -32,6 +35,39 @@ $(document).ready(function () {
             swal("Feil!", xhr.responseJSON.message, "error")
         });
     }
+
+    /**
+     * Update report
+     */
+    $('button.save-report').click(function () {
+
+        var reservationId = $('.report-inventory').attr('data-reservation');
+        var report = [];
+
+        $('.report-inventory > tr').each (function (index, row) {
+            report.push({
+                statusId: parseInt($(row).attr('data-inventory-status-id')),
+                broken  : $(row).find('.broken > input').is(':checked'),
+                comment : $(row).find('.comment > input').val()
+            });
+        });
+
+        $.ajax ({
+            type: 'post',
+            url : 'reservations/'+reservationId+'/report',
+            data: JSON.stringify(report),
+            contentType: "application/json",
+        })
+        .fail(function(xhr) {
+            swal("Feil!", xhr.responseJSON.message, "error")
+        })
+        .success(function (data) {
+            swal("Reservert!", "Koien er herved reservert", "success")
+        });
+
+
+    });
+
 
     /**
      * Show report modal
