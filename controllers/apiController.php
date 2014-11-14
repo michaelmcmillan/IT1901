@@ -182,21 +182,47 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
         $app->error(new apiException('Ugyldig reservasjon.'));
 
     /* There can not exist a previous report on this reservation (one-to-one) */
-    if (R::findOne('reports', ' reservation_id = ?', array ($reservationId)))
+    if (R::findOne('reports', ' reservation_id = ?', array ($reservationId))
+
+    /* Unless the user is an administrator */
+    &&  !isset($_SESSION['user']['admin']))
         $app->error(new apiException('Det finnes allerede en rapport for denne reservasjonen.'));
 
-    /* A user can only report on a reservation belonging to himself or herself */
-    if ($reservation->userId !== $_SESSION['user']['id'])
+    /* A user can only report on a reservation belonging to himself */
+    if ($reservation->userId !== $_SESSION['user']['id']
+
+    /* ... unless the user is an admin */
+    ||  !isset($_SESSION['user']['admin']))
         $app->error(new apiException('Du har ikke lov til å rapportere på dette oppholdet.'));
 
     /* Retrieve the JSON payload and store each field in the reports table */
     $reportFields = json_decode($app->request->getBody(), true);
+
     foreach ($reportFields as $reportField) {
-        $report = R::dispense('reports');
+
+        /* Try to load an exisisting report */
+        $exisistingReport = R::findOne('reports',
+            'reservation_id = ? and inventory_id = ?', array (
+                $reservationId,
+                $reportField['statusId']
+        ));
+
+        /* If we found one, update that one instead of creating a new report */
+        if (!empty($exisistingReport)) {
+            $report = $exisistingReport;
+        }
+
+        /* We found no exisisting report, so let's create a new one */
+        else
+            $report = R::dispense('reports');
+
+        /* Fill in the attributes from the payload */
         $report->reservationId = (int)  $reservationId;
         $report->inventoryId   = (int)  $reportField['statusId'];
         $report->broken        = (bool) $reportField['broken'];
         $report->comment       =        $reportField['comment'];
+
+        /* Save the changes */
         R::store($report);
     }
 
@@ -229,7 +255,7 @@ $app->get('/cabins/:cabinId/status', function ($cabinId) use ($app) {
     $app->response->headers->set('Content-Type', 'application/json');
 
     /* Must be an administrator */
-    if (!isset($_SESSION['user']))
+    if (!isset($_SESSION['user']['admin']))
         $app->error(new apiException('Du må være administrator for dette.'));
 
     /* Return the last report for the given cabin */
