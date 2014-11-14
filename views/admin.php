@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <!-- Reservation form -->
+    <!-- Status form -->
     <div class="row status-form" style="display:none;">
         <div class="col-md-12">
             <h3 id="cabin"></h3>
@@ -41,6 +41,7 @@
                     <!-- Inventory gets injected here -->
                 </tbody>
             </table>
+            <button type="button" class="btn btn-success save-report">Lagre</button>
         </div>
 
     </div>
