@@ -62,7 +62,7 @@ $(document).ready(function () {
             swal("Feil!", xhr.responseJSON.message, "error")
         })
         .success(function (data) {
-            swal("Reservert!", "Koien er herved reservert", "success")
+            swal("Reservert!", "Inventaret for koien er oppdatert", "success")
         });
 
 
@@ -103,38 +103,16 @@ $(document).ready(function () {
     /**
      * View previous reservations
      */
-    $('a#reservation-previous').click(previousReservations);
+    $('a#reservation-statistics').click(reservationStatistics);
 
-    function previousReservations () {
-        var reservationTable = $('table.reservation-table > tbody');
+    function reservationStatistics () {
+        alert(1);
+        /*var reservationTable = $('table.reservation-table > tbody');
         $('.reservation-form').slideUp('slow');
         $(reservationTable).children('tr').remove();
-
+        */
         $.getJSON('reservations', function (reservations) {
 
-            if (reservations.length === 0)
-                swal('Feil!', 'Du har ingen tidligere reservasjoner', "error");
-            else
-                $(reservations).each(function (index, reservation) {
-                    $(reservationTable).append(
-                        '<tr>'  +
-                            '<td>'+ reservation.name +'</td>' +
-                            '<td>'+ reservation.to +'</td>' +
-                            '<td>'+ reservation.from +'</td>' +
-                            '<td class="report">' +
-                                '<button type="button" ' +
-                                        'class="btn btn-xs btn-danger" '+
-                                        'data-reservation="'+ reservation.id+ '" '+
-                                        'data-cabin="'+ reservation.cabin_id+'">' +
-                                    'Avlegg' +
-                                '</button>' +
-                            '</td>' +
-                        '</tr>'
-                    );
-
-                    if (index == reservations.length - 1)
-                        $('.reservation-previous').slideDown("slow");
-                });
         });
     }
 
