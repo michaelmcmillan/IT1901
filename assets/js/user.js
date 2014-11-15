@@ -175,8 +175,7 @@ $(document).ready(function () {
                map: map.map,
                labelContent: cabin.name,
                labelAnchor: new google.maps.Point(22, 0),
-               labelClass: 'label',
-               click: function () {alert(1);}
+               labelClass: 'label'
              });
 
              map.addMarker({
@@ -208,7 +207,7 @@ $(document).ready(function () {
                     });
                 }
             });
-            
+
         });
     });
 })
