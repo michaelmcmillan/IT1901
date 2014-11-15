@@ -161,10 +161,25 @@ $(document).ready(function () {
       streetViewControl: false
     });
 
+
+
+    // console.log(map, marker);
+
     $.getJSON('cabins', function (cabins) {
         $(cabins).each(function (index, cabin) {
 
-            map.addMarker({
+            var marker = new MarkerWithLabel({
+               position: new google.maps.LatLng(cabin.latitude, cabin.longitude),
+               draggable: false,
+               raiseOnDrag: false,
+               map: map.map,
+               labelContent: cabin.name,
+               labelAnchor: new google.maps.Point(22, 0),
+               labelClass: 'label',
+               click: function () {alert(1);}
+             });
+
+             map.addMarker({
                 lat: cabin.latitude,
                 lng: cabin.longitude,
                 title: cabin.name,
@@ -182,17 +197,18 @@ $(document).ready(function () {
                         closeOnConfirm: true
                     }, function () {
 
-                        /* Hide reservation form if open */
+                        // Hide reservation form if open
                         $('.reservation-previous').slideUp('slow');
                         $('.reservation-form').slideUp("slow", function () {
 
-                            /* Open the new reservation form */
+                            //Open the new reservation form //
                             reserveForm(cabin);
                         });
 
                     });
                 }
             });
+            
         });
     });
 })
