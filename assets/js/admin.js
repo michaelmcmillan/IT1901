@@ -133,6 +133,16 @@ $(document).ready(function () {
     $.getJSON('cabins', function (cabins) {
         $(cabins).each(function (index, cabin) {
 
+            var marker = new MarkerWithLabel({
+               position: new google.maps.LatLng(cabin.latitude, cabin.longitude),
+               draggable: false,
+               raiseOnDrag: false,
+               map: map.map,
+               labelContent: cabin.name,
+               labelAnchor: new google.maps.Point(22, 0),
+               labelClass: 'label'
+             });
+
             map.addMarker({
                 lat: cabin.latitude,
                 lng: cabin.longitude,
