@@ -145,6 +145,10 @@ $(document).ready(function () {
         .success(function (data) {
             swal("Reservert!", "Koien er herved reservert", "success");
             $('.reservation-form').slideUp('slow');
+            $('input[name="cabin"]').val('');
+            $('input[name="beds"]').val('');
+            $('input[name="from"]').val('');
+            $('input[name="to"]').val('');
         });
 
     }
