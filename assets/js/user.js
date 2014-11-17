@@ -99,8 +99,8 @@ $(document).ready(function () {
                     $(reservationTable).append(
                         '<tr>'  +
                             '<td>'+ reservation.name +'</td>' +
-                            '<td>'+ reservation.to +'</td>' +
                             '<td>'+ reservation.from +'</td>' +
+                            '<td>'+ reservation.to +'</td>' +
                             '<td class="report">' +
                                 '<button type="button" ' +
                                         'class="btn btn-xs btn-danger" '+
