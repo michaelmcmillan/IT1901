@@ -75,10 +75,9 @@ $(document).ready(function () {
             swal("Feil!", xhr.responseJSON.message, "error")
         })
         .success(function (data) {
-            swal("Reservert!", "Koien er herved reservert", "success")
+            swal("Lagret!", "Rapporten din er motatt. Takk!", "success");
+            $('.reservation-report').modal('hide');
         });
-
-
     });
 
     /**
