@@ -143,7 +143,8 @@ $(document).ready(function () {
             swal("Feil!", xhr.responseJSON.message, "error")
         })
         .success(function (data) {
-            swal("Reservert!", "Koien er herved reservert", "success")
+            swal("Reservert!", "Koien er herved reservert", "success");
+            $('.reservation-form').slideUp('slow');
         });
 
     }
