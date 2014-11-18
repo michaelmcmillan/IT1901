@@ -283,3 +283,59 @@ $app->get('/cabins/:cabinId/status', function ($cabinId) use ($app) {
 
     echo json_encode ($reportsToReturn, true);
 });
+
+/**
+ * GET /cabins/:id/statistics
+ * - Returns statistics for a provided cabin
+ */
+$app->get('/cabins/:cabinId/statistics', function ($cabinId) use ($app) {
+    $app->response->headers->set('Content-Type', 'application/json');
+
+    /* Must be an administrator */
+    if (!isset($_SESSION['user']['admin']))
+        $app->error(new apiException('Du må være administrator for dette.'));
+
+    /* Return the last report for the given cabin */
+    $query = R::getAll(
+        'select * from reservations '.
+        'where reservations.cabin_id = :cabinId '.
+        'and   reservations.to       > now() - interval 6 month', array (
+            ':cabinId' => (int) $cabinId
+    ));
+
+    /* Return the objects as json*/
+    $stats = R::exportAll(R::convertToBeans('inventory_status', $query));
+
+    /* If no reports were found throw exception */
+    if (empty($stats))
+        throw new apiException ('Denne koien har ingen statistikk.');
+
+    /* Generate array for months */
+    $statsToReturn = array (
+        new stdClass(), new stdClass(),
+        new stdClass(), new stdClass(),
+        new stdClass(), new stdClass(),
+        new stdClass(), new stdClass(),
+        new stdClass(), new stdClass(),
+        new stdClass(), new stdClass(),
+    );
+
+    /* Build month object from redbean */
+    foreach ($stats as $key => $stat) {
+        $monthNumber = (int) date('m', strtotime($stat['to']));
+        $month = $statsToReturn[$monthNumber];
+        $month->beds += $stat['beds'];
+        $month->month = $monthNumber;
+    }
+
+    /* Fill in empty stats */
+    foreach ($statsToReturn as $key => $statToReturn) {
+        $bufferMonth = new stdClass();
+        $bufferMonth->beds = 0;
+        $bufferMonth->month = $key;
+        if (!isset($statToReturn->beds))
+            $statsToReturn[$key] = $bufferMonth;
+    }
+
+    echo json_encode ($statsToReturn, true);
+});

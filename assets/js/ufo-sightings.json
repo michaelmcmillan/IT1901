@@ -1,0 +1,27 @@
+[
+    {
+        "måned": 1,
+        "reserverte senger": 5
+    },
+    {
+        "måned": 2,
+        "reserverte senger": 9
+    },
+    {
+        "måned": 3,
+        "reserverte senger": 3
+    },
+    {
+        "måned": 4,
+        "reserverte senger": 4
+    },
+    {
+        "måned": 5,
+        "reserverte senger": 2
+    },
+
+    {
+        "måned": 6,
+        "reserverte senger": 2
+    }
+]

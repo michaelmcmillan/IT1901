@@ -28,7 +28,11 @@
     <!-- Status form -->
     <div class="row status-form" style="display:none;">
         <div class="col-md-12">
-            <h3 id="cabin"></h3>
+            <h2 id="cabin"></h2>
+            <h3>Statistikk</h3>
+            <div id="stats"></div>
+
+            <h3>Inventartstaus</h3>
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -48,6 +52,9 @@
 
     <!-- Previous reservations list -->
     <div class="row reservation-previous" style="display:none;">
+
+
+
         <div class="col-md-12">
             <table class="table table-hover reservation-table">
               <thead>

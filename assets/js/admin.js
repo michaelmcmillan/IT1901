@@ -5,11 +5,25 @@ $(document).ready(function () {
      */
     function statusForm (cabin) {
 
+        /* Stats */
+        d3.json('/cabins/'+cabin.id+'/statistics', function(data) {
+            data_graphic({
+                title: "",
+                description: "Statistikk på hvor mange senger som har vært reservert.",
+                data: data,
+                width: 700,
+                height: 250,
+                target: '#stats',
+                x_accessor: 'month',
+                y_accessor: 'beds'
+            })
+        });
+
         $.getJSON('cabins/'+ cabin.id +'/status')
         .success(function(inventories) {
             $('.status-form').slideDown ("slow", function () {
 
-                $('h3#cabin').text('Status for ' + cabin.name);
+                $('h2#cabin').text(cabin.name);
                 $('.report-inventory').children('tr').remove();
 
                 $(inventories).each(function (index, inventory) {
@@ -70,7 +84,7 @@ $(document).ready(function () {
 
 
     /**
-     * Show report modal
+     * Show report table
      */
     $('table.reservation-table > tbody').on('click', 'button', function (event) {
 
@@ -80,6 +94,7 @@ $(document).ready(function () {
         $('.reservation-report').attr('data-reservation', reservationId);
         $('.report-inventory').children('tr').remove();
 
+        /* Report */
         $.getJSON('cabins/'+ cabinId +'/inventory', function (inventories) {
             $(inventories).each(function (index, inventory) {
                 $('.report-inventory').append(
@@ -103,20 +118,26 @@ $(document).ready(function () {
     /**
      * View previous reservations
      */
-    $('a#reservation-statistics').click(reservationStatistics);
+    $('a#reservation-statistics').click(function () {
+        var reservationStats = $('div.graph-stats');
+        $('.status-form').slideUp('slow');
 
-    function reservationStatistics () {
-        alert(1);
-        /*var reservationTable = $('table.reservation-table > tbody');
-        $('.reservation-form').slideUp('slow');
-        $(reservationTable).children('tr').remove();
-        */
-        $.getJSON('reservations', function (reservations) {
+        $(reservationStats).slideDown('slow');
 
+        d3.json('/assets/js/ufo-sightings.json', function(data) {
+            data_graphic({
+                title: "Reservasjonsstatistikk",
+                description: "Statistikk på hvor mange senger som har vært reservert.",
+                data: data,
+                width: 750,
+                height: 150,
+                target: '#stats',
+                x_accessor: 'year',
+                y_accessor: 'sightings',
+                markers: []
+            })
         });
-
-
-    }
+    });
 
 
     /**
