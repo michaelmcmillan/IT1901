@@ -28,6 +28,22 @@ Webserveren vil lytte på port http://localhost:1337 etter at kommandoen under e
 ````bash
 ./serve.sh
 ````
+### Filstruktur
+Under vises en trestruktur over filene.
+````
+├── assets (ressurser)
+│   ├── css
+│   ├── fonts
+│   └── js
+├── controllers (kontrollere)
+├── models (redbean orm)
+├── vendor (biblioteker)
+│   ├── composer
+│   └── slim
+│       └── slim
+└── views  (frontend)
+````
+
 
 ### API
 Systemet eksponerer et API over HTTP. Dette lar deg utvikle eksterne systemer som kan utføre handlinger uten å være knyttet til denne kodebasen. Under følger en oversikt over metodene du kan kalle på i API-et. Metodene krever at man er innlogget. Noen metoder krever at brukeren som er innlogget er markert som en administrator.
