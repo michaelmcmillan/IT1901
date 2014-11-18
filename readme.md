@@ -1,7 +1,7 @@
 IT1901 - NTNUI Koier
 =======
 
-Dette er repo-et holder styr på utviklingen av et
+Dette er repo-et som holder styr på utviklingen av et
 reservasjonssystem for NTNUI sine koier. For å lese
 mer om selve koiene kan du besøke deres [nettsider](http://org.ntnu.no/koiene/).
 Systemet er utviklet i forbindelse med emnet IT1901 (Prosjekt 1).
