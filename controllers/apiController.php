@@ -204,7 +204,7 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
     if ($reservation->userId !== $_SESSION['user']['id']
 
     /* ... unless the user is an admin */
-    ||  !isset($_SESSION['user']['admin']))
+    &&  !isset($_SESSION['user']['admin']))
         $app->error(new apiException('Du har ikke lov til å rapportere på dette oppholdet.'));
 
     /* Retrieve the JSON payload and store each field in the reports table */
@@ -341,14 +341,14 @@ $app->get('/cabins/:cabinId/statistics', function ($cabinId) use ($app) {
         $monthNumber = (int) date('m', strtotime($stat['to']));
         $month = $statsToReturn[$monthNumber];
         $month->beds += $stat['beds'];
-        $month->month = $monthNumber;
+        $month->month = $monthNumber + 1;
     }
 
     /* Fill in empty stats */
     foreach ($statsToReturn as $key => $statToReturn) {
         $bufferMonth = new stdClass();
         $bufferMonth->beds = 0;
-        $bufferMonth->month = $key;
+        $bufferMonth->month = $key + 1;
         if (!isset($statToReturn->beds))
             $statsToReturn[$key] = $bufferMonth;
     }
