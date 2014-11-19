@@ -153,7 +153,7 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
      $statuses = R::convertToBeans('test', $statusQuery);
      foreach ($statuses as $status) {
          if ($status->broken == 1) {
-             //print_r($status)
+             $statusString += json_encode ($status);
          }
      }
 
