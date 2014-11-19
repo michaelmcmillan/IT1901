@@ -142,7 +142,7 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
     $userEmail = 'email@michaelmcmillan.net';
     $subject = 'Kvittering på koiereservasjon';
     $message = 'Hei! Du har reservert '. R::load('cabins', $cabinId)->name.' fra ' .
-               $from . ' til ' . $to . ' for '.$beds.' personer!';
+               $from . ' til ' . $to . ' for '.$beds.' person(er)!';
     $headers = 'From: koiergr16@org.ntnu.no' . "\r\n" .
         'Reply-To: michaedm@stud.ntnu.no' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
