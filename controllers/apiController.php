@@ -164,8 +164,8 @@ $app->get('/reservations', function () use ($app) {
 
     /* Get reservations which are in the past (by currently logged in user) */
     $query = R::getAll(
-        'select reservations.*, cabins.name from reservations left '.
-        'join cabins on reservations.cabin_id = cabins.id '.
+        'select reservations.*, cabins.name from reservations  '.
+        'left join cabins on reservations.cabin_id = cabins.id '.
         'where user_id = :userId and '               .
         'unix_timestamp(reservations.to) <= unix_timestamp(now())', array (
             ':userId' => $_SESSION['user']['id']
@@ -237,6 +237,10 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
         /* Save the changes */
         R::store($report);
     }
+
+    /* Mark the reservation-report as received */
+    $reservation->receivedReport = true;
+    R::store($reservation);
 
     echo json_encode (array ('message' => 'success'), true);
 });
