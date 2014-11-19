@@ -263,6 +263,16 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
     $reservation->receivedReport = true;
     R::store($reservation);
 
+    /* If user is submitting, alert the admin */
+    $adminEmail = 'michaedm@stud.ntnu.no';
+    $subject = 'Rapport motatt for koie';
+    $koie    = R::load('cabins', $reservation->cabinId);
+    $message = 'Hei! En rapport har nettopp blitt registrert på ' . $koie->name . '.';
+    $headers = 'From: michaedm@stud.ntnu.no' . "\r\n" .
+        'Reply-To: michaedm@stud.ntnu.no' . "\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+    mail($userEmail, $subject, $message, $headers);
+
     echo json_encode (array ('message' => 'success'), true);
 });
 
