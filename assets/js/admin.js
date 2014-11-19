@@ -15,7 +15,8 @@ $(document).ready(function () {
                 height: 250,
                 target: '#stats',
                 x_accessor: 'month',
-                y_accessor: 'beds'
+                y_accessor: 'beds',
+                interpolate: 'basic'
             })
         });
 
