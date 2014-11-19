@@ -271,7 +271,7 @@ $app->post('/reservations/:reservationId/report', function ($reservationId) use 
     $headers = 'From: michaedm@stud.ntnu.no' . "\r\n" .
         'Reply-To: michaedm@stud.ntnu.no' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
-    mail($userEmail, $subject, $message, $headers);
+    mail($adminEmail, $subject, $message, $headers);
 
     echo json_encode (array ('message' => 'success'), true);
 });
