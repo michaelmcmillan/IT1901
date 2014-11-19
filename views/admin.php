@@ -31,7 +31,7 @@
             <h3>Statistikk</h3>
             <div id="stats"></div>
 
-            <h3>Inventartstaus</h3>
+            <h3>Inventarstatus</h3>
             <table class="table table-hover">
                 <thead>
                     <tr>
