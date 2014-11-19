@@ -133,8 +133,20 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
     $reservation->to      = date('Y-m-d H:i:s', strtotime($to));
     $id = R::store($reservation);
 
+    /* If database stored the reservation without problems */
     if (!$id)
         $app->error(new apiException('Noe gikk galt. Prøv igjen senere.'));
+
+    /* Send an email confirmation */
+    $userEmail = R::load('users', $_SESSION['user']['id'])->email;
+    $userEmail = 'email@michaelmcmillan.net';
+    $subject = 'Kvittering på koiereservasjon';
+    $message = 'Hei! Du har reservert '. R::load('cabins', $cabinId)->name.' fra ' .
+               $from . ' til ' . $to . ' for '.$beds.' personer!';
+    $headers = 'From: koiergr16@org.ntnu.no' . "\r\n" .
+        'Reply-To: michaedm@stud.ntnu.no' . "\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+    mail($userEmail, $subject, $message, $headers);
 
     echo json_encode (array ('message' => 'success'), true);
 
