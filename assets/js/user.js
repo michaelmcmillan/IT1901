@@ -102,6 +102,28 @@ $(document).ready(function () {
                 swal('Feil!', 'Du har ingen tidligere reservasjoner', "error");
             else
                 $(reservations).each(function (index, reservation) {
+
+                    /* Determine btn state */
+                    var btn;
+                    var states = {
+                        success: {
+                            class: 'btn-success',
+                            text: 'Avlagt',
+                            onclick: ''
+                        },
+
+                        error: {
+                            class: 'btn-danger',
+                            text: 'Avlegg',
+                            onclick: 'window.showReportModal(this);'
+                        }
+                    };
+
+                    if (reservation['received_report'] === '1')
+                        btn = states.success;
+                    else
+                        btn = states.error;
+
                     $(reservationTable).append(
                         '<tr>'  +
                             '<td>'+ reservation.name +'</td>' +
@@ -109,11 +131,11 @@ $(document).ready(function () {
                             '<td>'+ reservation.to.substring(0, 10) +'</td>' +
                             '<td class="report">' +
                                 '<button type="button" ' +
-                                        'onclick="window.showReportModal(this);" ' +
-                                        'class="btn btn-xs btn-danger" '+
+                                        'onclick="'+btn.onclick+'" ' +
+                                        'class="btn btn-xs '+btn.class+'" '+
                                         'data-reservation="'+ reservation.id+ '" '+
-                                        'data-cabin="'+ reservation.cabin_id+'">' +
-                                    'Avlegg' +
+                                        'data-cabin="'+ reservation.cabin_id+'">'
+                                    + btn.text +
                                 '</button>' +
                             '</td>' +
                         '</tr>'
