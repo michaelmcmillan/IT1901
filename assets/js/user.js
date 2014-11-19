@@ -23,15 +23,20 @@ $(document).ready(function () {
     /**
      * Show report modal
      */
-    $('table.reservation-table > tbody').on('click', 'button', function (event) {
+    //$('table.reservation-table > tbody > tr > td').on('click', 'button', function (event) {
+    window.showReportModal = function (event) {
 
-        var reservationId = $(event.target).attr('data-reservation');
-        var cabinId       = $(event.target).attr('data-cabin');
+        var reservationId = $(event).attr('data-reservation');
+        var cabinId       = $(event).attr('data-cabin');
 
         $('.reservation-report').attr('data-reservation', reservationId);
         $('.report-inventory').children('tr').remove();
 
         $.getJSON('cabins/'+ cabinId +'/inventory', function (inventories) {
+
+            if (inventories.length === 0)
+                swal("Feil!", 'Kan ikke lage rapport, fordi koien har ingen inventar.', "error");
+
             $(inventories).each(function (index, inventory) {
                 $('.report-inventory').append(
                     '<tr data-inventory-status-id="'+inventory.id+'">' +
@@ -47,7 +52,7 @@ $(document).ready(function () {
                 $('.reservation-report').modal('show');
             });
         });
-    });
+    };
 
     /**
      * Save report
@@ -99,10 +104,11 @@ $(document).ready(function () {
                     $(reservationTable).append(
                         '<tr>'  +
                             '<td>'+ reservation.name +'</td>' +
-                            '<td>'+ reservation.from +'</td>' +
-                            '<td>'+ reservation.to +'</td>' +
+                            '<td>'+ reservation.from.substring(0, 10) +'</td>' +
+                            '<td>'+ reservation.to.substring(0, 10) +'</td>' +
                             '<td class="report">' +
                                 '<button type="button" ' +
+                                        'onclick="window.showReportModal(this);" ' +
                                         'class="btn btn-xs btn-danger" '+
                                         'data-reservation="'+ reservation.id+ '" '+
                                         'data-cabin="'+ reservation.cabin_id+'">' +
