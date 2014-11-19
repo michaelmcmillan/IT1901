@@ -48,8 +48,8 @@ $(document).ready(function () {
                     '</tr>'
                 );
 
-            if (index === inventories.length -1)
-                $('.reservation-report').modal('show');
+                if (index === inventories.length -1)
+                    $('.reservation-report').modal('show');
             });
         });
     };
@@ -82,6 +82,7 @@ $(document).ready(function () {
         .success(function (data) {
             swal("Lagret!", "Rapporten din er motatt. Takk!", "success");
             $('.reservation-report').modal('hide');
+            previousReservations();
         });
     });
 
