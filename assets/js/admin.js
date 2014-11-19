@@ -6,7 +6,7 @@ $(document).ready(function () {
     function statusForm (cabin) {
 
         /* Stats */
-        d3.json('/cabins/'+cabin.id+'/statistics', function(data) {
+        d3.json('cabins/'+cabin.id+'/statistics', function(data) {
             data_graphic({
                 title: "",
                 description: "Statistikk på hvor mange senger som har vært reservert.",
