@@ -137,13 +137,34 @@ $app->post('/reserve/:cabinId', function ($cabinId) use ($app, $isAvailable) {
     if (!$id)
         $app->error(new apiException('Noe gikk galt. Prøv igjen senere.'));
 
+    /* Build status msg */
+     $statusQuery = R::getAll(
+         'select * from reservations '.
+             'left join reports   on reports.reservation_id = reservations.id '.
+             'left join inventory on reports.inventory_id   = inventory.id '.
+         'where reservations.cabin_id = :cabinId and '.
+         '      received_report = "1" ' .
+         'order by reservations.to desc;', array (
+             ':cabinId' => (int) $cabinId
+     ));
+
+     /* Return the objects as json*/
+     $statusString = '';
+     $statuses = R::convertToBeans('test', $statusQuery);
+     foreach ($statuses as $status) {
+         if ($status->broken == 1) {
+             //print_r($status)
+         }
+     }
+
     /* Send an email confirmation */
     $userEmail = R::load('users', $_SESSION['user']['id'])->email;
     $userEmail = 'email@michaelmcmillan.net';
     $subject = 'Kvittering på koiereservasjon';
+
     $message = 'Hei! Du har reservert '. R::load('cabins', $cabinId)->name.' fra ' .
                $from . ' til ' . $to . ' for '.$beds.' person(er)!';
-    $headers = 'From: koiergr16@org.ntnu.no' . "\r\n" .
+    $headers = 'From: michaedm@stud.ntnu.no' . "\r\n" .
         'Reply-To: michaedm@stud.ntnu.no' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
     mail($userEmail, $subject, $message, $headers);
